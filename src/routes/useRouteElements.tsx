@@ -9,11 +9,14 @@ export default function useRouteElements() {
       path: '/',
       index: true,
       element: (
-        <Login />
-        // <MainLayout>
-        //   <Discover />
-        // </MainLayout>
+        <MainLayout>
+          <Discover />
+        </MainLayout>
       )
+    },
+    {
+      path: '/login',
+      element: <Login />
     }
   ])
   return elements

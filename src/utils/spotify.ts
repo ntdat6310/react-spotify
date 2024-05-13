@@ -1,5 +1,5 @@
-const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID
-const redirect_uri = 'http://localhost:3000/login'
+export const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID
+export const redirect_uri = 'http://localhost:3000/login'
 
 export async function redirectToSpotifyAuthCodeFlow() {
   const verifier = generateCodeVerifier(128)
@@ -37,7 +37,10 @@ async function generateCodeChallenge(codeVerifier: string) {
     .replace(/=+$/, '')
 }
 
-export async function getAccessToken(code: string): Promise<string> {
+export async function getTokensFromSpotify(code: string): Promise<{
+  access_token: string
+  refresh_token: string
+}> {
   const verifier = localStorage.getItem('verifier')
 
   const params = new URLSearchParams()
@@ -53,6 +56,6 @@ export async function getAccessToken(code: string): Promise<string> {
     body: params
   })
 
-  const { access_token } = await result.json()
-  return access_token
+  const { access_token, refresh_token } = await result.json()
+  return { access_token, refresh_token }
 }

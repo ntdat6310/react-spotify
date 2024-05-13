@@ -1,10 +1,7 @@
 import SongCard from 'src/components/SongCard'
 import { genres } from 'src/assets/constants/constants'
-import { useGetWorldChartsQuery } from 'src/redux/apis/shazamApi'
 
 export default function Discover() {
-  const { data, isFetching, error } = useGetWorldChartsQuery({})
-  console.log(data)
   return (
     <div className='flex flex-col text-gray-300'>
       <div className='w-full flex justify-between items-center flex-col sm:flex-row mt-4 mb-10'>
