@@ -1,0 +1,37 @@
+import { useEffect } from 'react'
+import { FaSpotify } from 'react-icons/fa'
+import useQueryParams from 'src/hooks/useQueryParams'
+import { getAccessToken, redirectToSpotifyAuthCodeFlow } from 'src/utils/spotify'
+
+export default function Login() {
+  const { code } = useQueryParams()
+
+  useEffect(() => {
+    if (code) {
+      getAccessToken(code).then((token) => {
+        console.log(token)
+      })
+    }
+  }, [code])
+
+  const handleLoginSpotify = () => {
+    redirectToSpotifyAuthCodeFlow()
+  }
+
+  return (
+    <div className='h-[100vh] w-full bg-black text-white'>
+      <div className='flex flex-col items-center justify-center h-full gap-10'>
+        <div className='text-3xl overflow-hidden whitespace-nowrap'>
+          <span className='inline-block animate-marquee'>Welcome to Spotify</span>
+        </div>
+        <FaSpotify className='w-20 h-20 text-fuchsia-500' />
+        <button
+          onClick={handleLoginSpotify}
+          className='pt-3 pb-4 px-10 rounded-lg border-2 border-fuchsia-500 hover:bg-fuchsia-700 text-xl'
+        >
+          Login
+        </button>
+      </div>
+    </div>
+  )
+}
