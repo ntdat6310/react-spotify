@@ -1,39 +1,25 @@
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import classNames from 'classnames'
 import { HiOutlineHome, HiOutlineMenu, HiOutlineMenuAlt2, HiOutlineSearch } from 'react-icons/hi'
 import { RiCloseLine } from 'react-icons/ri'
-import classNames from 'classnames'
-import { useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import {
+  useGetCurrentUserAlbumsQuery,
+  useGetCurrentUserPlaylistsQuery,
+  useGetCurrentUserProfileQuery
+} from 'src/redux/apis/spotifyApi'
+import Playlists from './components/Playlists'
+import Albums from './components/Albums'
 
 export default function Home() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-  const LibraryItems = ({ handleClick }: { handleClick?: () => void }) => (
-    <>
-      {Array(10)
-        .fill(0)
-        .map((_, index) => (
-          <NavLink
-            key={index}
-            to='#'
-            className='flex flex-row items-center justify-start gap-x-4 rounded-lg font-medium hover:bg-gray-800'
-            onClick={() => handleClick && handleClick()}
-          >
-            <img
-              src='https://i.scdn.co/image/ab67616d0000b27326cdcebc621b42d6ec3ef548'
-              alt=''
-              className='h-12 w-12 shrink-0 rounded-lg'
-            />
-            <div className='flex h-full grow flex-col justify-around'>
-              <span className='line-clamp-1 capitalize text-white'> Thương về miền trung</span>
-              <span className='line-clamp-1 text-xs'>
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Reprehenderit sequi tempore tempora atque
-                laboriosam dicta, magnam repudiandae quia assumenda voluptatibus.
-              </span>
-            </div>
-          </NavLink>
-        ))}
-    </>
-  )
+  const { data: profile } = useGetCurrentUserProfileQuery()
+  const { data: playlists } = useGetCurrentUserPlaylistsQuery()
+  const { data: albums } = useGetCurrentUserAlbumsQuery()
+  console.log('profile', profile)
+  console.log('playlists', playlists)
+  console.log('albums', albums)
   return (
     <div className='relative flex h-[90vh] w-full bg-black-custom font-body'>
       <HiOutlineMenu
@@ -57,7 +43,8 @@ export default function Home() {
           <span className='text-lg font-bold'>Your Library</span>
         </div>
         <div className='hide-scrollbar flex flex-col gap-4 overflow-y-auto'>
-          <LibraryItems />
+          <Playlists playlists={playlists} />
+          <Albums albums={albums} />
         </div>
       </nav>
       {/* Mobile, Tablet sidebar*/}
@@ -88,7 +75,8 @@ export default function Home() {
           <span className='text-lg font-bold'>Your Library</span>
         </div>
         <div className='hide-scrollbar flex flex-col gap-4 overflow-y-auto'>
-          <LibraryItems />
+          <Playlists playlists={playlists} />
+          <Albums albums={albums} />
         </div>
       </nav>
     </div>
