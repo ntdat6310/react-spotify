@@ -1,18 +1,23 @@
 import { Link } from 'react-router-dom'
 import { UserProfile } from 'src/types/user.type'
 import Popover from '../Popover'
+import { useDispatch } from 'react-redux'
+import { logout } from 'src/redux/slices/profile.slice'
 
 interface Props {
   profile: UserProfile
 }
 export default function UserDropdownMenu({ profile }: Props) {
-  const handleLogout = () => {}
+  const dispatch = useDispatch()
+  const handleLogout = () => {
+    dispatch(logout())
+  }
 
   return (
     <Popover
       childrenClasses='self-start'
       renderPopover={
-        <div className='flex min-w-[150px] flex-col items-start bg-[#3e365c] text-[20px] text-lg text-white shadow-md'>
+        <div className='flex min-w-[200px] flex-col items-start bg-[#3e365c] text-[20px] text-lg text-white shadow-md'>
           <Link className='w-full px-4 py-3 text-left transition-all hover:bg-[#5f518e]' to='#'>
             Profile
           </Link>
@@ -22,7 +27,7 @@ export default function UserDropdownMenu({ profile }: Props) {
         </div>
       }
     >
-      <div className='flex cursor-pointer items-center text-white hover:text-gray-300'>
+      <div className='flex cursor-pointer items-center gap-x-4 text-white hover:text-gray-300'>
         <div className='h-12 w-12 flex-shrink-0'>
           {profile.images && profile.images.length > 0 ? (
             <img src={profile.images[0].url} alt='avatar' className='h-full w-full rounded-md object-cover' />
@@ -32,7 +37,7 @@ export default function UserDropdownMenu({ profile }: Props) {
             </div>
           )}
         </div>
-        <div className='ml-2 max-w-[120px] truncate pr-10 text-lg font-medium'>{profile.display_name}</div>
+        <div className='max-w-[120px] truncate pr-10 text-lg font-medium'>{profile.display_name}</div>
       </div>
     </Popover>
   )

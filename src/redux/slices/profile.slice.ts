@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { UserProfile } from 'src/types/user.type'
-import { getAccessTokenFromLS, getProfileFromLS } from 'src/utils/auth'
+import { clearLS, getAccessTokenFromLS, getProfileFromLS } from 'src/utils/auth'
 
 const initialState: {
   profile: UserProfile | null
@@ -19,7 +19,12 @@ export const profileSlice = createSlice({
     },
     setProfile: (state, action: PayloadAction<UserProfile | null>) => {
       state.profile = action.payload
+    },
+    logout: (state) => {
+      state.isAuthenticated = false
+      state.profile = null
+      clearLS()
     }
   }
 })
-export const { setIsAuthenticated, setProfile } = profileSlice.actions
+export const { setIsAuthenticated, setProfile, logout } = profileSlice.actions
