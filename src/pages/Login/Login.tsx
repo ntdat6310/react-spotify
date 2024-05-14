@@ -1,13 +1,16 @@
 import { useEffect } from 'react'
 import { FaSpotify } from 'react-icons/fa'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import useQueryParams from 'src/hooks/useQueryParams'
 import { useGetTokensQuery } from 'src/redux/apis/spotifyApi'
+import { setIsAuthenticated } from 'src/redux/slices/profile.slice'
 import { setAccessTokenToLS, setRefreshTokenToLS } from 'src/utils/auth'
 import { redirectToSpotifyAuthCodeFlow } from 'src/utils/spotify'
 
 export default function Login() {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const { code } = useQueryParams()
 
   const { data } = useGetTokensQuery(code, {
@@ -18,11 +21,12 @@ export default function Login() {
     if (data) {
       setAccessTokenToLS(data.access_token)
       setRefreshTokenToLS(data.refresh_token)
+      dispatch(setIsAuthenticated(true))
       navigate({
         pathname: '/'
       })
     }
-  }, [data, navigate])
+  }, [data, navigate, dispatch])
 
   const handleLoginSpotify = () => {
     redirectToSpotifyAuthCodeFlow()
