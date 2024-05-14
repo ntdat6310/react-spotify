@@ -92,6 +92,17 @@ export const spotifyApi = createApi({
           method: 'GET'
         }
       }
+    }),
+    getFeaturedPlaylists: builder.query<{ message: string; playlists: Playlists }, void>({
+      query: () => {
+        return {
+          url: '/browse/featured-playlists',
+          params: {
+            limit: 20,
+            offset: 0
+          }
+        }
+      }
     })
   })
 })
@@ -100,5 +111,6 @@ export const {
   useGetTokensQuery,
   useGetCurrentUserAlbumsQuery,
   useGetCurrentUserPlaylistsQuery,
-  useGetCurrentUserProfileQuery
+  useGetCurrentUserProfileQuery,
+  useGetFeaturedPlaylistsQuery
 } = spotifyApi

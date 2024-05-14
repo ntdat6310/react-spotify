@@ -25,7 +25,7 @@ export default function Sidebar() {
           setMobileMenuOpen(true)
         }}
       />
-      <nav className='absolute top-0 hidden h-full flex-col gap-4 bg-black px-4 py-6 text-gray-300 transition-all  lg:left-0 lg:flex lg:w-[25%]'>
+      <nav className='hidden h-full flex-shrink-0 flex-col gap-4 bg-black px-4 py-6 text-gray-300 transition-all lg:left-0 lg:flex lg:w-[30%] xl:w-[25%]'>
         {profile && <UserDropdownMenu profile={profile} />}
         <Link to='#' className='flex items-center gap-x-4 transition-all hover:text-white'>
           <HiOutlineHome className='h-6 w-6' />
