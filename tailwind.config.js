@@ -4,7 +4,10 @@ export default {
   theme: {
     extend: {
       colors: {
-        black: '#191624'
+        'black-custom': '#191624'
+      },
+      fontFamily: {
+        body: ['DM Sans', 'san-serif']
       }
     }
   },

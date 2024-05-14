@@ -1,6 +1,5 @@
 import { useRoutes } from 'react-router-dom'
-import MainLayout from 'src/layouts/MainLayout'
-import Discover from 'src/pages/Discover'
+import Home from 'src/pages/Home'
 import Login from 'src/pages/Login'
 
 export default function useRouteElements() {
@@ -8,11 +7,7 @@ export default function useRouteElements() {
     {
       path: '/',
       index: true,
-      element: (
-        <MainLayout>
-          <Discover />
-        </MainLayout>
-      )
+      element: <Home />
     },
     {
       path: '/login',

@@ -39,7 +39,7 @@ export default function Login() {
           onClick={handleLoginSpotify}
           className='pt-3 pb-4 px-10 rounded-lg border-2 border-fuchsia-500 hover:bg-fuchsia-700 text-xl'
         >
-          Login
+          Connect to Spotify
         </button>
       </div>
     </div>
