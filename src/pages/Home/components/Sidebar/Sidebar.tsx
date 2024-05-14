@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import classNames from 'classnames'
 import { HiOutlineHome, HiOutlineMenu, HiOutlineMenuAlt2, HiOutlineSearch } from 'react-icons/hi'
@@ -15,8 +15,15 @@ import UserDropdownMenu from '../UserDropdownMenu'
 export default function Sidebar() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { data: playlists } = useGetCurrentUserPlaylistsQuery()
-  const { data: albums } = useGetCurrentUserAlbumsQuery()
+  const { data: currentUserAlbums } = useGetCurrentUserAlbumsQuery()
   const { data: profile } = useGetCurrentUserProfileQuery()
+
+  const albums = useMemo(() => {
+    if (currentUserAlbums) {
+      return currentUserAlbums.items.map((item) => item.album)
+    }
+  }, [currentUserAlbums])
+
   return (
     <>
       <HiOutlineMenu

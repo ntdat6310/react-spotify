@@ -1,6 +1,6 @@
 import { BaseQueryFn, createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import axios, { AxiosError, AxiosRequestConfig } from 'axios'
-import { Albums } from 'src/types/album.type'
+import { Albums, CurrentUserAlbums } from 'src/types/album.type'
 import { AuthSpotify } from 'src/types/auth.type'
 import { Playlists } from 'src/types/playlist.type'
 import { UserProfile } from 'src/types/user.type'
@@ -77,7 +77,7 @@ export const spotifyApi = createApi({
         }
       }
     }),
-    getCurrentUserAlbums: builder.query<Albums, void>({
+    getCurrentUserAlbums: builder.query<CurrentUserAlbums, void>({
       query: () => {
         return {
           url: '/me/albums',
@@ -103,6 +103,18 @@ export const spotifyApi = createApi({
           }
         }
       }
+    }),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    getNewReleasedAlbums: builder.query<{ albums: Albums }, void>({
+      query: () => {
+        return {
+          url: '/browse/new-releases',
+          params: {
+            limit: 20,
+            offset: 0
+          }
+        }
+      }
     })
   })
 })
@@ -112,5 +124,6 @@ export const {
   useGetCurrentUserAlbumsQuery,
   useGetCurrentUserPlaylistsQuery,
   useGetCurrentUserProfileQuery,
-  useGetFeaturedPlaylistsQuery
+  useGetFeaturedPlaylistsQuery,
+  useGetNewReleasedAlbumsQuery
 } = spotifyApi

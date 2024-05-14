@@ -1,12 +1,18 @@
-export interface Albums {
+export interface CurrentUserAlbums {
   href: string
-  items: RootObjectItem[]
+  items: {
+    added_at: string
+    album: Album
+  }[]
   total: number
 }
 
-interface RootObjectItem {
-  added_at: Date
-  album: Album
+export interface Albums {
+  href: string
+  items: Album[]
+  total: number
+  limit: number
+  offset: number
 }
 
 export interface Album {
