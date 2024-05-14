@@ -1,11 +1,22 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { UserProfile } from 'src/types/user.type'
+import { getAccessTokenFromLS, getProfileFromLS } from 'src/utils/auth'
 
-const initialProfile: UserProfile | null = null
+const initialState: {
+  profile: UserProfile | null
+  isAuthenticated: boolean
+} = {
+  profile: getProfileFromLS(),
+  isAuthenticated: Boolean(getAccessTokenFromLS())
+}
 
 export const profileSlice = createSlice({
   name: 'profile',
-  initialState: initialProfile,
-  reducers: {}
+  initialState: initialState,
+  reducers: {
+    setIsAuthenticated: (state, action: PayloadAction<boolean>) => {
+      state.isAuthenticated = action.payload
+    }
+  }
 })
-// export const { startUpdatingPost, cancelUpdatingPost } = profileSlice.actions
+export const { setIsAuthenticated } = profileSlice.actions

@@ -4,7 +4,6 @@ export const redirect_uri = 'http://localhost:3000/login'
 export async function redirectToSpotifyAuthCodeFlow() {
   const verifier = generateCodeVerifier(128)
   const challenge = await generateCodeChallenge(verifier)
-
   localStorage.setItem('verifier', verifier)
 
   const params = new URLSearchParams()
