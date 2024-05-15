@@ -166,6 +166,16 @@ export const spotifyApi = createApi({
           ids: id
         }
       })
+    }),
+    addTrackToPlaylist: builder.mutation<void, { playlistId: string; uris: string[]; position: number }>({
+      query: ({ playlistId, position = 0, uris }) => ({
+        url: `/playlists/${playlistId}/tracks`,
+        method: 'POST',
+        data: {
+          uris: uris,
+          position: position
+        }
+      })
     })
   })
 })
@@ -181,5 +191,6 @@ export const {
   useGetArtistAlbumsQuery,
   useSaveAlbumForCurrentUserMutation,
   useIsAlbumSavedQuery,
-  useRemoveAlbumForCurrentUserMutation
+  useRemoveAlbumForCurrentUserMutation,
+  useAddTrackToPlaylistMutation
 } = spotifyApi

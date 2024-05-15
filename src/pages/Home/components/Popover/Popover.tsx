@@ -1,5 +1,8 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import {
   FloatingArrow,
+  FloatingFocusManager,
   FloatingPortal,
   Placement,
   arrow,
@@ -24,7 +27,6 @@ interface Props {
 export default function Popover({ children, renderPopover, placement = 'bottom-start', childrenClasses = '' }: Props) {
   const arrowRef = useRef(null)
   const [isOpen, setIsOpen] = useState(false)
-
   const location = useLocation()
   useEffect(() => {
     if (isOpen) {
@@ -56,9 +58,17 @@ export default function Popover({ children, renderPopover, placement = 'bottom-s
 
       {isOpen && (
         <FloatingPortal>
-          <div ref={refs.setFloating} style={floatingStyles} {...getFloatingProps()} className='z-50'>
+          <div
+            ref={refs.setFloating}
+            style={floatingStyles}
+            {...getFloatingProps()}
+            className='z-50'
+            onClick={() => {
+              setIsOpen(false)
+            }}
+          >
             {renderPopover}
-            <FloatingArrow ref={arrowRef} context={context} width={30} height={15} fill='#3e365c' />
+            <FloatingArrow ref={arrowRef} context={context} width={30} height={15} fill='#252136' />
           </div>
         </FloatingPortal>
       )}

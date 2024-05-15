@@ -5,6 +5,7 @@ import { config } from 'src/assets/constants/config'
 import {
   useGetAlbumQuery,
   useGetArtistAlbumsQuery,
+  useGetCurrentUserPlaylistsQuery,
   useIsAlbumSavedQuery,
   useRemoveAlbumForCurrentUserMutation,
   useSaveAlbumForCurrentUserMutation
@@ -18,6 +19,7 @@ import AlbumItem from './components/AlbumItem'
 import Spinner from 'src/components/Spinner'
 import classNames from 'classnames'
 import { toast } from 'react-toastify'
+import { BsThreeDotsVertical } from 'react-icons/bs'
 
 export default function Album() {
   const navigate = useNavigate()
@@ -54,6 +56,8 @@ export default function Album() {
   const handleAlbumClicked = (id: string) => () => {
     navigate(`/album/${id}`)
   }
+
+  const { data: currentUserPlaylists } = useGetCurrentUserPlaylistsQuery()
 
   const isFetching = isAlbumFetching || isArtistAlbumsFetching
 
@@ -128,15 +132,22 @@ export default function Album() {
           <div className='min-w-[800px]'>
             <div className='grid grid-cols-12 gap-x-1'>
               <div className='col-span-1 text-center'>#</div>
-              <div className='col-span-6'>Title</div>
+              <div className='col-span-5'>Title</div>
               <div className='col-span-4'>Artist</div>
               <div className='col-span-1 flex items-center justify-center'>
                 <FaRegClock className='h-6 w-6' />
               </div>
+              <div className='col-span-1 m-auto'>
+                <BsThreeDotsVertical className='h-5 w-5 text-white' />
+              </div>
             </div>
             <div className='mb-4 mt-2 h-[1px] w-full bg-gray-600'></div>
-            <div className='flex flex-col gap-4'>
-              {album && album.tracks && album.tracks.items.map((track) => <AlbumItem key={track.id} track={track} />)}
+            <div className='flex flex-col gap-2'>
+              {album &&
+                album.tracks &&
+                album.tracks.items.map((track) => (
+                  <AlbumItem key={track.id} track={track} userPlaylists={currentUserPlaylists?.items} />
+                ))}
             </div>
           </div>
         </div>

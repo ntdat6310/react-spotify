@@ -4,7 +4,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        'black-custom': '#191624'
+        'black-custom': '#191624',
+        'black-custom-hover': '#302a45'
       },
       fontFamily: {
         body: ['DM Sans', 'san-serif']
