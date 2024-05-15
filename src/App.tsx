@@ -3,6 +3,8 @@ import useRouteElements from './routes/useRouteElements'
 import { LocalStorageEventTarget } from './utils/auth'
 import { reset } from './redux/slices/profile.slice'
 import { useEffect } from 'react'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 function App() {
   const dispatch = useDispatch()
@@ -15,7 +17,12 @@ function App() {
   }, [dispatch])
 
   const routeElements = useRouteElements()
-  return <div>{routeElements}</div>
+  return (
+    <div>
+      <ToastContainer />
+      {routeElements}
+    </div>
+  )
 }
 
 export default App

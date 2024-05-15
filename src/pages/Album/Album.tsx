@@ -2,11 +2,22 @@ import { useMemo } from 'react'
 import { FaRegClock } from 'react-icons/fa'
 import { useNavigate, useParams } from 'react-router-dom'
 import { config } from 'src/assets/constants/config'
-import { useGetAlbumQuery, useGetArtistAlbumsQuery } from 'src/redux/apis/spotifyApi'
+import {
+  useGetAlbumQuery,
+  useGetArtistAlbumsQuery,
+  useIsAlbumSavedQuery,
+  useRemoveAlbumForCurrentUserMutation,
+  useSaveAlbumForCurrentUserMutation
+} from 'src/redux/apis/spotifyApi'
 import { formatTotalTime } from 'src/utils/helper'
+import { FiPlusCircle } from 'react-icons/fi'
+import { IoIosCheckmarkCircle } from 'react-icons/io'
+
 import PlaylistCard from '../Home/components/PlaylistCard'
 import AlbumItem from './components/AlbumItem'
 import Spinner from 'src/components/Spinner'
+import classNames from 'classnames'
+import { toast } from 'react-toastify'
 
 export default function Album() {
   const navigate = useNavigate()
@@ -18,6 +29,11 @@ export default function Album() {
       skip: !(Boolean(album) && Boolean(album?.artists.at(0)?.id))
     }
   )
+  const { data: isAlbumSaved, refetch } = useIsAlbumSavedQuery(album?.id as string, {
+    skip: !album
+  })
+  const [saveAlbum] = useSaveAlbumForCurrentUserMutation()
+  const [removeAlbum] = useRemoveAlbumForCurrentUserMutation()
 
   const artistsName = useMemo(() => {
     if (album?.artists) {
@@ -69,6 +85,43 @@ export default function Album() {
             <p className='hidden text-gray-300 sm:block'>{formatTotalTime(totalTime)}</p>
           </div>
         </div>
+      </div>
+      <div className='ml-5 mt-10'>
+        {isAlbumSaved && isAlbumSaved?.length > 0 && isAlbumSaved[0] ? (
+          <IoIosCheckmarkCircle
+            className={classNames('h-10 w-10 cursor-pointer text-green-600 hover:text-green-400', {
+              hidden: !album
+            })}
+            onClick={() => {
+              removeAlbum(album?.id as string)
+                .unwrap()
+                .then(() => {
+                  refetch()
+                  toast.success('Album is removed!', {
+                    autoClose: 1500,
+                    position: 'top-center'
+                  })
+                })
+            }}
+          />
+        ) : (
+          <FiPlusCircle
+            className={classNames('h-10 w-10 cursor-pointer text-gray-400 hover:text-white', {
+              hidden: !album
+            })}
+            onClick={() => {
+              saveAlbum(album?.id as string)
+                .unwrap()
+                .then(() => {
+                  refetch()
+                  toast.success('Album is added!', {
+                    autoClose: 1500,
+                    position: 'top-center'
+                  })
+                })
+            }}
+          />
+        )}
       </div>
       <div className='mt-10 text-xl text-gray-300'>
         <div className='hide-scrollbar overflow-auto'>

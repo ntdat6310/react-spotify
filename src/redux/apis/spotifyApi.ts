@@ -139,6 +139,33 @@ export const spotifyApi = createApi({
           offset: 0
         }
       })
+    }),
+    saveAlbumForCurrentUser: builder.mutation<void, string>({
+      query: (id) => ({
+        url: '/me/albums',
+        method: 'PUT',
+        data: {
+          ids: [id]
+        }
+      })
+    }),
+    removeAlbumForCurrentUser: builder.mutation<void, string>({
+      query: (id) => ({
+        url: '/me/albums',
+        method: 'DELETE',
+        data: {
+          ids: [id]
+        }
+      })
+    }),
+    isAlbumSaved: builder.query<boolean[], string>({
+      query: (id) => ({
+        url: `/me/albums/contains`,
+        method: 'GET',
+        params: {
+          ids: id
+        }
+      })
     })
   })
 })
@@ -151,5 +178,8 @@ export const {
   useGetFeaturedPlaylistsQuery,
   useGetNewReleasedAlbumsQuery,
   useGetAlbumQuery,
-  useGetArtistAlbumsQuery
+  useGetArtistAlbumsQuery,
+  useSaveAlbumForCurrentUserMutation,
+  useIsAlbumSavedQuery,
+  useRemoveAlbumForCurrentUserMutation
 } = spotifyApi
