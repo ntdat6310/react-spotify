@@ -1,6 +1,6 @@
 import { BaseQueryFn, createApi } from '@reduxjs/toolkit/query/react'
 import axios, { AxiosError, AxiosRequestConfig } from 'axios'
-import { Albums, CurrentUserAlbums } from 'src/types/album.type'
+import { Album, Albums, CurrentUserAlbums } from 'src/types/album.type'
 import { AuthSpotify } from 'src/types/auth.type'
 import { Playlists } from 'src/types/playlist.type'
 import { UserProfile } from 'src/types/user.type'
@@ -125,7 +125,7 @@ export const spotifyApi = createApi({
       }
     }),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    getAlbum: builder.query<any, string>({
+    getAlbum: builder.query<Album, string>({
       query: (id) => ({
         url: `/albums/${id}`,
         method: 'GET'
