@@ -5,7 +5,7 @@ import { HiUser } from 'react-icons/hi2'
 
 interface Props {
   albums?: Album[]
-  handleClick?: () => void
+  handleClick?: (id: string) => void
 }
 export default function Albums({ handleClick, albums }: Props) {
   return (
@@ -14,9 +14,11 @@ export default function Albums({ handleClick, albums }: Props) {
         albums?.map((album) => (
           <NavLink
             key={album.id}
-            to='#'
+            to={{
+              pathname: `/album/${album.id}`
+            }}
             className='flex flex-row items-center justify-start gap-x-4 rounded-lg hover:bg-gray-800'
-            onClick={() => handleClick && handleClick()}
+            onClick={() => handleClick && handleClick(album.id)}
           >
             <img
               src={album.images && album.images.length > 0 ? `${album.images[0].url}` : config.default_image}

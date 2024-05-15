@@ -3,6 +3,8 @@ import Home from 'src/pages/Home'
 import Login from 'src/pages/Login'
 import ProtectedRoute from './ProtectedRoute'
 import RejectedRoute from './RejectedRoute'
+import MainLayout from 'src/layouts/MainLayout'
+import Album from 'src/pages/Album'
 
 export default function useRouteElements() {
   const elements = useRoutes([
@@ -12,7 +14,19 @@ export default function useRouteElements() {
       children: [
         {
           path: '/',
-          element: <Home />
+          element: (
+            <MainLayout>
+              <Home />
+            </MainLayout>
+          )
+        },
+        {
+          path: '/album/:id',
+          element: (
+            <MainLayout>
+              <Album />
+            </MainLayout>
+          )
         }
       ]
     },

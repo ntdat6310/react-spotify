@@ -5,17 +5,17 @@ import { HiUser } from 'react-icons/hi2'
 
 interface Props {
   playlists?: PlaylistType
-  handleClick?: () => void
 }
-export default function Playlists({ handleClick, playlists }: Props) {
+export default function Playlists({ playlists }: Props) {
   return (
     <>
       {playlists?.items.map((playlist) => (
         <NavLink
           key={playlist.id}
-          to='#'
+          to={{
+            pathname: `/playlist/${playlist.id}`
+          }}
           className='flex flex-row items-center justify-start gap-x-4 rounded-lg font-medium hover:bg-gray-800'
-          onClick={() => handleClick && handleClick()}
         >
           <img
             src={playlist.images && playlist.images.length > 0 ? `${playlist.images[0].url}` : config.default_image}

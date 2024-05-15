@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import classNames from 'classnames'
 import { HiOutlineHome, HiOutlineMenu, HiOutlineMenuAlt2, HiOutlineSearch } from 'react-icons/hi'
 import { RiCloseLine } from 'react-icons/ri'
@@ -13,6 +13,7 @@ import Albums from '../Albums'
 import UserDropdownMenu from '../UserDropdownMenu'
 
 export default function Sidebar() {
+  const navigate = useNavigate()
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { data: playlists } = useGetCurrentUserPlaylistsQuery()
   const { data: currentUserAlbums } = useGetCurrentUserAlbumsQuery()

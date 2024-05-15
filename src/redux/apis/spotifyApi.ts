@@ -103,6 +103,7 @@ export const spotifyApi = createApi({
       query: () => {
         return {
           url: '/browse/featured-playlists',
+          method: 'GET',
           params: {
             limit: 20,
             offset: 0
@@ -115,12 +116,20 @@ export const spotifyApi = createApi({
       query: () => {
         return {
           url: '/browse/new-releases',
+          method: 'GET',
           params: {
             limit: 20,
             offset: 0
           }
         }
       }
+    }),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    getAlbum: builder.query<any, string>({
+      query: (id) => ({
+        url: `/albums/${id}`,
+        method: 'GET'
+      })
     })
   })
 })
@@ -131,5 +140,6 @@ export const {
   useGetCurrentUserPlaylistsQuery,
   useGetCurrentUserProfileQuery,
   useGetFeaturedPlaylistsQuery,
-  useGetNewReleasedAlbumsQuery
+  useGetNewReleasedAlbumsQuery,
+  useGetAlbumQuery
 } = spotifyApi

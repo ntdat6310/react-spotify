@@ -8,9 +8,14 @@ interface Props {
   id?: string
   onClick?: () => void
 }
-export default function PlaylistCard({ imgUrl, title, author }: Props) {
+export default function PlaylistCard({ imgUrl, title, author, onClick }: Props) {
   return (
-    <div className='group relative w-[250px] cursor-pointer rounded-md p-3 text-white'>
+    <button
+      onClick={() => {
+        onClick && onClick()
+      }}
+      className='group relative w-[250px] cursor-pointer rounded-md p-3 text-white'
+    >
       <div className='relative w-full pt-[100%]'>
         <img
           src={imgUrl ? imgUrl : config.default_image}
@@ -22,6 +27,6 @@ export default function PlaylistCard({ imgUrl, title, author }: Props) {
       <p className='line-clamp-1 capitalize text-gray-300'>{author}</p>
       <FaPlay className='absolute left-[50%] top-[50%] z-20 hidden h-10 w-10 -translate-x-1/2 -translate-y-1/2 text-white group-hover:block' />
       <div className='absolute inset-0 z-10 hidden rounded-md bg-black/40 group-hover:block'></div>
-    </div>
+    </button>
   )
 }
