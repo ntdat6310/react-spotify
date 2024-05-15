@@ -1,18 +1,31 @@
-import { useParams } from 'react-router-dom'
-import { useGetAlbumQuery } from 'src/redux/apis/spotifyApi'
-import { FaRegClock } from 'react-icons/fa'
-import AlbumItem from './components/AlbumItem'
-import { config } from 'src/assets/constants/config'
 import { useMemo } from 'react'
+import { FaRegClock } from 'react-icons/fa'
+import { useNavigate, useParams } from 'react-router-dom'
+import { config } from 'src/assets/constants/config'
+import { useGetAlbumQuery, useGetArtistAlbumsQuery } from 'src/redux/apis/spotifyApi'
 import { formatTotalTime } from 'src/utils/helper'
+import PlaylistCard from '../Home/components/PlaylistCard'
+import AlbumItem from './components/AlbumItem'
+import Spinner from 'src/components/Spinner'
 
 export default function Album() {
+  const navigate = useNavigate()
   const { id } = useParams()
-  const { data: album } = useGetAlbumQuery(id || '')
+  const { data: album, isFetching: isAlbumFetching } = useGetAlbumQuery(id || '')
+  const { data: artistAlbums, isFetching: isArtistAlbumsFetching } = useGetArtistAlbumsQuery(
+    album?.artists.at(0)?.id as string,
+    {
+      skip: !(Boolean(album) && Boolean(album?.artists.at(0)?.id))
+    }
+  )
 
-  console.log('album', album)
+  const artistsName = useMemo(() => {
+    if (album?.artists) {
+      return album.artists.map((item) => item.name)
+    }
+    return []
+  }, [album])
 
-  const artistsName = album?.artists && album?.artists.map((item) => item.name)
   const totalTime = useMemo(() => {
     if (album) {
       return album.tracks.items.reduce((accumulator, currentItem) => {
@@ -21,8 +34,17 @@ export default function Album() {
     }
     return 0
   }, [album])
-  return (
-    <div>
+
+  const handleAlbumClicked = (id: string) => () => {
+    navigate(`/album/${id}`)
+  }
+
+  const isFetching = isAlbumFetching || isArtistAlbumsFetching
+
+  return isFetching ? (
+    <Spinner />
+  ) : (
+    <>
       <div className='flex flex-wrap items-end justify-center gap-4'>
         <div className='h-[250px] w-[250px] shrink-0'>
           <img
@@ -33,7 +55,7 @@ export default function Album() {
         </div>
         <div className='flex grow flex-col gap-4 text-white'>
           <p className='text-gray-300'>Album</p>
-          <h1 className='text-2xl font-medium tracking-wide sm:text-3xl'>{album?.name}</h1>
+          <h1 className='line-clamp-1 text-2xl font-bold tracking-wide sm:text-3xl xl:text-5xl'>{album?.name}</h1>
           <div className='flex items-center gap-3'>
             <div className='h-10 w-10'>
               <img
@@ -66,6 +88,20 @@ export default function Album() {
           </div>
         </div>
       </div>
-    </div>
+      <div className='mt-10'>
+        <h2 className='mb-2 ml-4 text-3xl font-bold tracking-wide text-white'>More by {album?.artists.at(0)?.name}</h2>
+        <div className='flex flex-wrap items-center'>
+          {artistAlbums?.items.map((item) => (
+            <PlaylistCard
+              key={item.id}
+              imgUrl={item.images.length > 0 ? item.images[0].url : undefined}
+              title={item.name}
+              author={item.artists.length > 0 ? item.artists[0].name : undefined}
+              onClick={handleAlbumClicked(item.id)}
+            />
+          ))}
+        </div>
+      </div>
+    </>
   )
 }

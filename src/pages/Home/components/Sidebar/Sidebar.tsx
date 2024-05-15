@@ -1,19 +1,18 @@
-import { useMemo, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
 import classNames from 'classnames'
+import { useMemo, useState } from 'react'
 import { HiOutlineHome, HiOutlineMenu, HiOutlineMenuAlt2, HiOutlineSearch } from 'react-icons/hi'
 import { RiCloseLine } from 'react-icons/ri'
+import { Link } from 'react-router-dom'
 import {
   useGetCurrentUserAlbumsQuery,
   useGetCurrentUserPlaylistsQuery,
   useGetCurrentUserProfileQuery
 } from 'src/redux/apis/spotifyApi'
-import Playlists from '../Playlists'
 import Albums from '../Albums'
+import Playlists from '../Playlists'
 import UserDropdownMenu from '../UserDropdownMenu'
 
 export default function Sidebar() {
-  const navigate = useNavigate()
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { data: playlists } = useGetCurrentUserPlaylistsQuery()
   const { data: currentUserAlbums } = useGetCurrentUserAlbumsQuery()
@@ -35,7 +34,7 @@ export default function Sidebar() {
       />
       <nav className='hidden h-full flex-shrink-0 flex-col gap-4 bg-black px-4 py-6 text-gray-300 transition-all lg:left-0 lg:flex lg:w-[30%] xl:w-[25%]'>
         {profile && <UserDropdownMenu profile={profile} />}
-        <Link to='#' className='flex items-center gap-x-4 transition-all hover:text-white'>
+        <Link to='/' className='flex items-center gap-x-4 transition-all hover:text-white'>
           <HiOutlineHome className='h-6 w-6' />
           <span className='text-lg font-bold'>Home</span>
         </Link>

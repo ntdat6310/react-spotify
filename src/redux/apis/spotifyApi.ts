@@ -124,11 +124,20 @@ export const spotifyApi = createApi({
         }
       }
     }),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getAlbum: builder.query<Album, string>({
       query: (id) => ({
         url: `/albums/${id}`,
         method: 'GET'
+      })
+    }),
+    getArtistAlbums: builder.query<Albums, string>({
+      query: (id) => ({
+        url: `/artists/${id}/albums`,
+        method: 'GET',
+        params: {
+          limit: 10,
+          offset: 0
+        }
       })
     })
   })
@@ -141,5 +150,6 @@ export const {
   useGetCurrentUserProfileQuery,
   useGetFeaturedPlaylistsQuery,
   useGetNewReleasedAlbumsQuery,
-  useGetAlbumQuery
+  useGetAlbumQuery,
+  useGetArtistAlbumsQuery
 } = spotifyApi
