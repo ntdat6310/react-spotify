@@ -1,16 +1,14 @@
 import { Link } from 'react-router-dom'
 import { UserProfile } from 'src/types/user.type'
+import { clearLS } from 'src/utils/auth'
 import Popover from '../Popover'
-import { useDispatch } from 'react-redux'
-import { logout } from 'src/redux/slices/profile.slice'
 
 interface Props {
   profile: UserProfile
 }
 export default function UserDropdownMenu({ profile }: Props) {
-  const dispatch = useDispatch()
   const handleLogout = () => {
-    dispatch(logout())
+    clearLS()
   }
 
   return (

@@ -1,10 +1,11 @@
-import { BaseQueryFn, createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { BaseQueryFn, createApi } from '@reduxjs/toolkit/query/react'
 import axios, { AxiosError, AxiosRequestConfig } from 'axios'
 import { Albums, CurrentUserAlbums } from 'src/types/album.type'
 import { AuthSpotify } from 'src/types/auth.type'
 import { Playlists } from 'src/types/playlist.type'
 import { UserProfile } from 'src/types/user.type'
-import { getAccessTokenFromLS } from 'src/utils/auth'
+import { clearLS, getAccessTokenFromLS } from 'src/utils/auth'
+import { isUnauthorizedError } from 'src/utils/helper'
 import { clientId, redirect_uri } from 'src/utils/spotify'
 
 const axiosBaseQuery =
@@ -37,6 +38,11 @@ const axiosBaseQuery =
       })
       return { data: result.data }
     } catch (axiosError) {
+      if (isUnauthorizedError(axiosError)) {
+        // Logout
+        // We can clear localStorage here, but how to set isAuthenticated in global state?
+        clearLS()
+      }
       const err = axiosError as AxiosError
       return {
         error: {

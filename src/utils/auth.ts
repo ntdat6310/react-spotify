@@ -26,6 +26,13 @@ export const setProfileToLS = (profile: UserProfile) => {
   localStorage.setItem('profile', JSON.stringify(profile))
 }
 
+export const LocalStorageEventTarget = new EventTarget()
 export const clearLS = () => {
   localStorage.clear()
+  /** Dispatch event when access token is expired
+   *  We need global state: isAuthenticated will be false and profile will be null)
+   *  So I dispatch and listen this event in App
+   */
+  const clearLocalStorageEvent = new Event('clearLS')
+  LocalStorageEventTarget.dispatchEvent(clearLocalStorageEvent)
 }
