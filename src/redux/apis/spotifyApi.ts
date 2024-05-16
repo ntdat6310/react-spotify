@@ -2,7 +2,7 @@ import { BaseQueryFn, createApi } from '@reduxjs/toolkit/query/react'
 import axios, { AxiosError, AxiosRequestConfig } from 'axios'
 import { Album, Albums, CurrentUserAlbums } from 'src/types/album.type'
 import { AuthSpotify } from 'src/types/auth.type'
-import { Playlists } from 'src/types/playlist.type'
+import { Playlist, Playlists, Track } from 'src/types/playlist.type'
 import { UserProfile } from 'src/types/user.type'
 import { clearLS, getAccessTokenFromLS } from 'src/utils/auth'
 import { isUnauthorizedError } from 'src/utils/helper'
@@ -167,13 +167,30 @@ export const spotifyApi = createApi({
         }
       })
     }),
-    addTrackToPlaylist: builder.mutation<void, { playlistId: string; uris: string[]; position: number }>({
+    addTrackToPlaylist: builder.mutation<void, { playlistId: string; uris: string[]; position?: number }>({
       query: ({ playlistId, position = 0, uris }) => ({
         url: `/playlists/${playlistId}/tracks`,
         method: 'POST',
         data: {
           uris: uris,
           position: position
+        }
+      })
+    }),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    getPlaylist: builder.query<Playlist, string>({
+      query: (playlistId) => ({
+        url: `/playlists/${playlistId}`,
+        method: 'GET'
+      })
+    }),
+    getRecommendationTracks: builder.query<{ tracks: Track[] }, { seed_artists: string; seed_tracks: string }>({
+      query: (payload) => ({
+        url: `/recommendations`,
+        params: {
+          seed_artists: payload.seed_artists,
+          seed_tracks: payload.seed_tracks,
+          limit: 10
         }
       })
     })
@@ -192,5 +209,7 @@ export const {
   useSaveAlbumForCurrentUserMutation,
   useIsAlbumSavedQuery,
   useRemoveAlbumForCurrentUserMutation,
-  useAddTrackToPlaylistMutation
+  useAddTrackToPlaylistMutation,
+  useGetPlaylistQuery,
+  useGetRecommendationTracksQuery
 } = spotifyApi

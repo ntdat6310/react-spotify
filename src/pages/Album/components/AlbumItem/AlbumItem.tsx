@@ -17,7 +17,7 @@ export default function AlbumItem({ track, userPlaylists = [] }: Props) {
   const artistsName = track?.artists && track?.artists.map((item) => item.name)
   return (
     <div
-      className={classNames('hover:bg-black-custom-hover group grid grid-cols-12 gap-x-1 py-2', {
+      className={classNames('group grid grid-cols-12 gap-x-1 py-2 hover:bg-black-custom-hover', {
         'bg-black-custom-hover': isOptionOpen
       })}
       onMouseLeave={() => {

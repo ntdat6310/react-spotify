@@ -50,6 +50,7 @@ export interface Tracks {
   href: string
   items: TracksItem[]
   limit: number
+  offset: number
   total: number
 }
 
