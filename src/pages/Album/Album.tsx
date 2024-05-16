@@ -65,7 +65,7 @@ export default function Album() {
     <Spinner />
   ) : (
     <>
-      <div className='flex flex-wrap items-end justify-center gap-4'>
+      <div className='flex flex-wrap items-end justify-center gap-4 px-4'>
         <div className='h-[250px] w-[250px] shrink-0'>
           <img
             src={(album && album?.images.at(0)?.url) || config.default_image}
