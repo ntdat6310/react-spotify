@@ -49,7 +49,7 @@ export default function User() {
           {userPlaylists?.items.map((item) => (
             <PlaylistCard
               key={item.id}
-              imgUrl={item.images?.length > 0 ? item.images[0].url : undefined}
+              imgUrl={item.images && item.images?.length > 0 ? item.images[0].url : undefined}
               title={item.name}
               author={userProfile?.display_name}
               onClick={handlePlaylistClicked(item.id)}

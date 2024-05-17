@@ -44,6 +44,13 @@ export interface ArtistWithImage extends Artist {
   images: Image[]
 }
 
+export interface ArtistProfile extends ArtistWithImage {
+  followers: {
+    href: string | null
+    total: number
+  }
+}
+
 export interface Image {
   url: string
   height: number

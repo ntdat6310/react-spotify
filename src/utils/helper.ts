@@ -37,3 +37,12 @@ export function millisecondsToMinutesAndSeconds(milliseconds: number): string {
 
   return formattedTime
 }
+
+export function formatNumberToSocialStyle(value: number) {
+  return new Intl.NumberFormat('en', {
+    notation: 'compact',
+    maximumFractionDigits: 1
+  })
+    .format(value)
+    .toLowerCase()
+}

@@ -1,6 +1,6 @@
 import { BaseQueryFn, createApi } from '@reduxjs/toolkit/query/react'
 import axios, { AxiosError, AxiosRequestConfig } from 'axios'
-import { Album, Albums, ArtistWithImage, CurrentUserAlbums, Tracks } from 'src/types/album.type'
+import { Album, Albums, ArtistProfile, ArtistWithImage, CurrentUserAlbums, Tracks } from 'src/types/album.type'
 import { AuthSpotify } from 'src/types/auth.type'
 import { Playlist, Playlists, Track } from 'src/types/playlist.type'
 import { UserProfile } from 'src/types/user.type'
@@ -256,6 +256,24 @@ export const spotifyApi = createApi({
           include_external: 'audio'
         }
       })
+    }),
+    getArtistTopTracks: builder.query<{ tracks: Track[] }, string>({
+      query: (artist_id) => ({
+        url: `/artists/${artist_id}/top-tracks`,
+        method: 'GET'
+      })
+    }),
+    getArtistRelatedArtists: builder.query<{ artists: ArtistWithImage[] }, string>({
+      query: (artist_id) => ({
+        url: `/artists/${artist_id}/related-artists`,
+        method: 'GET'
+      })
+    }),
+    getArtistProfile: builder.query<ArtistProfile, string>({
+      query: (artist_id) => ({
+        url: `/artists/${artist_id}`,
+        method: 'GET'
+      })
     })
   })
 })
@@ -281,5 +299,8 @@ export const {
   useSearchTrackQuery,
   useSearchAlbumQuery,
   useSearchArtistQuery,
-  useSearchPlaylistQuery
+  useSearchPlaylistQuery,
+  useGetArtistTopTracksQuery,
+  useGetArtistRelatedArtistsQuery,
+  useGetArtistProfileQuery
 } = spotifyApi

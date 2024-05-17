@@ -2,7 +2,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import {
   FloatingArrow,
-  FloatingFocusManager,
   FloatingPortal,
   Placement,
   arrow,

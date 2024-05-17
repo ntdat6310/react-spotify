@@ -38,7 +38,7 @@ export default function Home() {
       </div>
       <div className='m-auto my-6 h-[1px] w-[90%] bg-gray-700'></div>
       <div className=''>
-        <h2 className='mb-6 ml-4 text-4xl font-medium tracking-wide text-white'>New releases</h2>
+        <h2 className='mb-6 ml-4 text-4xl font-medium tracking-wide text-white'>New Released Albums</h2>
         <div className='flex flex-wrap items-center'>
           {newReleasedAlbums?.albums.items.map((item) => (
             <PlaylistCard

@@ -9,6 +9,7 @@ import Playlist from 'src/pages/Playlist'
 import User from 'src/pages/User'
 import Search from 'src/pages/Search'
 import NotFound from 'src/pages/NotFound'
+import Artist from 'src/pages/Artist'
 
 export default function useRouteElements() {
   const elements = useRoutes([
@@ -53,6 +54,14 @@ export default function useRouteElements() {
           element: (
             <MainLayout>
               <Search />
+            </MainLayout>
+          )
+        },
+        {
+          path: '/artist/:id',
+          element: (
+            <MainLayout>
+              <Artist />
             </MainLayout>
           )
         }
