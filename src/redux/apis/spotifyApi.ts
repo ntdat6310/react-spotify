@@ -41,7 +41,7 @@ const axiosBaseQuery =
       if (isUnauthorizedError(axiosError)) {
         // Logout
         // We can clear localStorage here, but how to set isAuthenticated in global state?
-        clearLS()
+        // clearLS()
       }
       const err = axiosError as AxiosError
       return {

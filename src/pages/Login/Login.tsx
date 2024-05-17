@@ -22,9 +22,6 @@ export default function Login() {
       setAccessTokenToLS(data.access_token)
       setRefreshTokenToLS(data.refresh_token)
       dispatch(setIsAuthenticated(true))
-      navigate({
-        pathname: '/'
-      })
     }
   }, [data, navigate, dispatch])
 

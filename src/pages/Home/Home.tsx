@@ -12,6 +12,9 @@ export default function Home() {
   const handleAlbumClicked = (id: string) => () => {
     navigate(`/album/${id}`)
   }
+  const handlePlaylistClicked = (id: string) => () => {
+    navigate(`/playlist/${id}`)
+  }
 
   const isLoading = isFeaturedPlaylistsLoading || isNewReleasedAlbumsLoading
   return isLoading ? (
@@ -27,6 +30,7 @@ export default function Home() {
               imgUrl={item.images[0].url}
               title={item.name}
               author={item.owner.display_name}
+              onClick={handlePlaylistClicked(item.id)}
             />
           ))}
         </div>

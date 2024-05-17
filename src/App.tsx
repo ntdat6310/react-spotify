@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux'
 import useRouteElements from './routes/useRouteElements'
-import { LocalStorageEventTarget } from './utils/auth'
+import { LocalStorageEventTarget, getAccessTokenFromLS } from './utils/auth'
 import { reset, setProfile } from './redux/slices/profile.slice'
 import { useEffect } from 'react'
 import { ToastContainer } from 'react-toastify'
@@ -10,8 +10,12 @@ import Spinner from './components/Spinner'
 
 function App() {
   const dispatch = useDispatch()
+  const access_token = getAccessTokenFromLS()
 
-  const { data: profile, isLoading } = useGetCurrentUserProfileQuery()
+  const { data: profile, isLoading } = useGetCurrentUserProfileQuery(undefined, {
+    skip: !access_token
+  })
+
   useEffect(() => {
     if (profile) {
       dispatch(setProfile(profile))
