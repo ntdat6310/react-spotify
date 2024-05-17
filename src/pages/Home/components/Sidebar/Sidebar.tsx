@@ -2,12 +2,10 @@ import classNames from 'classnames'
 import { useMemo, useState } from 'react'
 import { HiOutlineHome, HiOutlineMenu, HiOutlineMenuAlt2, HiOutlineSearch } from 'react-icons/hi'
 import { RiCloseLine } from 'react-icons/ri'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import {
-  useGetCurrentUserAlbumsQuery,
-  useGetCurrentUserPlaylistsQuery,
-  useGetCurrentUserProfileQuery
-} from 'src/redux/apis/spotifyApi'
+import { useGetCurrentUserAlbumsQuery, useGetCurrentUserPlaylistsQuery } from 'src/redux/apis/spotifyApi'
+import { RootState } from 'src/redux/store'
 import Albums from '../Albums'
 import Playlists from '../Playlists'
 import UserDropdownMenu from '../UserDropdownMenu'
@@ -16,7 +14,7 @@ export default function Sidebar() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { data: playlists } = useGetCurrentUserPlaylistsQuery()
   const { data: currentUserAlbums } = useGetCurrentUserAlbumsQuery()
-  const { data: profile } = useGetCurrentUserProfileQuery()
+  const profile = useSelector((state: RootState) => state.profile.profile)
 
   const albums = useMemo(() => {
     if (currentUserAlbums) {

@@ -1,32 +1,22 @@
-import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import {
-  useGetCurrentUserProfileQuery,
-  useGetFeaturedPlaylistsQuery,
-  useGetNewReleasedAlbumsQuery
-} from 'src/redux/apis/spotifyApi'
-import { setProfile } from 'src/redux/slices/profile.slice'
+import { useGetFeaturedPlaylistsQuery, useGetNewReleasedAlbumsQuery } from 'src/redux/apis/spotifyApi'
 import PlaylistCard from './components/PlaylistCard'
+import Spinner from 'src/components/Spinner'
 
 export default function Home() {
   const navigate = useNavigate()
-  const { data: profile } = useGetCurrentUserProfileQuery()
-  const dispatch = useDispatch()
-  useEffect(() => {
-    if (profile) {
-      dispatch(setProfile(profile))
-    }
-  }, [profile, dispatch])
 
-  const { data: featuredPlaylists } = useGetFeaturedPlaylistsQuery()
-  const { data: newReleasedAlbums } = useGetNewReleasedAlbumsQuery()
+  const { data: featuredPlaylists, isLoading: isFeaturedPlaylistsLoading } = useGetFeaturedPlaylistsQuery()
+  const { data: newReleasedAlbums, isLoading: isNewReleasedAlbumsLoading } = useGetNewReleasedAlbumsQuery()
 
   const handleAlbumClicked = (id: string) => () => {
     navigate(`/album/${id}`)
   }
 
-  return (
+  const isLoading = isFeaturedPlaylistsLoading || isNewReleasedAlbumsLoading
+  return isLoading ? (
+    <Spinner />
+  ) : (
     <>
       <div>
         <h2 className='mb-6 ml-4 text-4xl font-medium tracking-wide text-white'>Featured Playlists</h2>

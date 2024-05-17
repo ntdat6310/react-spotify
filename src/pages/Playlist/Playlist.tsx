@@ -15,6 +15,8 @@ import { formatTotalTime } from 'src/utils/helper'
 import PlaylistItem from './component/PlaylistItem/PlaylistItem'
 import RecommendedTrackItem from './component/RecommendedTrackItem/RecommendedTrackItem'
 import { toast } from 'react-toastify'
+import { useSelector } from 'react-redux'
+import { RootState } from 'src/redux/store'
 
 export default function Playlist() {
   const { id } = useParams()
@@ -25,6 +27,9 @@ export default function Playlist() {
   } = useGetPlaylistQuery(id as string, {
     skip: !id
   })
+
+  const currentUserId = useSelector((state: RootState) => state.profile.profile?.id)
+  const isCurrentUserOwnPlaylist = playlist?.owner.id === currentUserId
 
   const totalTime = useMemo(() => {
     if (playlist) {
