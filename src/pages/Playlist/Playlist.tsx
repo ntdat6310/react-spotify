@@ -8,7 +8,8 @@ import Spinner from 'src/components/Spinner'
 import {
   useAddTrackToPlaylistMutation,
   useGetPlaylistQuery,
-  useGetRecommendationTracksQuery
+  useGetRecommendationTracksQuery,
+  useRemoveTrackFromPlaylistMutation
 } from 'src/redux/apis/spotifyApi'
 import { formatTotalTime } from 'src/utils/helper'
 import PlaylistItem from './component/PlaylistItem/PlaylistItem'
@@ -69,6 +70,19 @@ export default function Playlist() {
       })
   }
 
+  const [removeTrack] = useRemoveTrackFromPlaylistMutation()
+  const handleRemoveTrackFromPlaylist = (trackUri: string) => () => {
+    removeTrack({
+      playlistId: playlist?.id as string,
+      uri: trackUri
+    })
+      .unwrap()
+      .then(() => {
+        toast.success('Track is removed!', { autoClose: 1500, position: 'top-center' })
+        refetchPlaylist()
+      })
+  }
+
   const isLoading = isLoadingPlaylist || isLoadingRecommendedTracks
   return isLoading ? (
     <Spinner />
@@ -119,7 +133,12 @@ export default function Playlist() {
             <div className='flex flex-col gap-2'>
               {playlist &&
                 playlist.tracks.items.map((track, index) => (
-                  <PlaylistItem key={track.track.id} track={track.track} index={index + 1} />
+                  <PlaylistItem
+                    key={track.track.id}
+                    track={track.track}
+                    index={index + 1}
+                    onRemoveTrack={handleRemoveTrackFromPlaylist(track.track.uri)}
+                  />
                 ))}
             </div>
           </div>

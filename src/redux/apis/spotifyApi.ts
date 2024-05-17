@@ -111,7 +111,6 @@ export const spotifyApi = createApi({
         }
       }
     }),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getNewReleasedAlbums: builder.query<{ albums: Albums }, void>({
       query: () => {
         return {
@@ -177,7 +176,15 @@ export const spotifyApi = createApi({
         }
       })
     }),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    removeTrackFromPlaylist: builder.mutation<void, { playlistId: string; uri: string }>({
+      query: (payload) => ({
+        url: `/playlists/${payload.playlistId}/tracks`,
+        method: 'DELETE',
+        data: {
+          tracks: [{ uri: payload.uri }]
+        }
+      })
+    }),
     getPlaylist: builder.query<Playlist, string>({
       query: (playlistId) => ({
         url: `/playlists/${playlistId}`,
@@ -211,5 +218,6 @@ export const {
   useRemoveAlbumForCurrentUserMutation,
   useAddTrackToPlaylistMutation,
   useGetPlaylistQuery,
-  useGetRecommendationTracksQuery
+  useGetRecommendationTracksQuery,
+  useRemoveTrackFromPlaylistMutation
 } = spotifyApi
