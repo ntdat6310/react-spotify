@@ -19,7 +19,7 @@ export default function UserDropdownMenu({ profile }: Props) {
           className='flex min-w-[200px] flex-col items-start
         bg-[#252136] text-[20px] text-lg text-white shadow-md'
         >
-          <Link className='w-full px-4 py-3 text-left transition-all hover:bg-[#5f518e]' to='#'>
+          <Link className='w-full px-4 py-3 text-left transition-all hover:bg-[#5f518e]' to={`/user/${profile.id}`}>
             Profile
           </Link>
           <button className='w-full px-4 py-3 text-left transition-all hover:bg-[#5f518e]' onClick={handleLogout}>

@@ -6,6 +6,7 @@ import RejectedRoute from './RejectedRoute'
 import MainLayout from 'src/layouts/MainLayout'
 import Album from 'src/pages/Album'
 import Playlist from 'src/pages/Playlist'
+import User from 'src/pages/User'
 
 export default function useRouteElements() {
   const elements = useRoutes([
@@ -34,6 +35,14 @@ export default function useRouteElements() {
           element: (
             <MainLayout>
               <Playlist />
+            </MainLayout>
+          )
+        },
+        {
+          path: '/user/:id',
+          element: (
+            <MainLayout>
+              <User />
             </MainLayout>
           )
         }

@@ -200,6 +200,18 @@ export const spotifyApi = createApi({
           limit: 10
         }
       })
+    }),
+    getUserProfile: builder.query<UserProfile, string>({
+      query: (user_id) => ({
+        url: `/users/${user_id}`,
+        method: 'GET'
+      })
+    }),
+    getUserPlaylists: builder.query<Playlists, string>({
+      query: (user_id) => ({
+        url: `/users/${user_id}/playlists`,
+        method: 'GET'
+      })
     })
   })
 })
@@ -219,5 +231,7 @@ export const {
   useAddTrackToPlaylistMutation,
   useGetPlaylistQuery,
   useGetRecommendationTracksQuery,
-  useRemoveTrackFromPlaylistMutation
+  useRemoveTrackFromPlaylistMutation,
+  useGetUserProfileQuery,
+  useGetUserPlaylistsQuery
 } = spotifyApi
