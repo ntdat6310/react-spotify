@@ -4,16 +4,26 @@ import { BsThreeDotsVertical } from 'react-icons/bs'
 import { TiDelete } from 'react-icons/ti'
 
 import { Link } from 'react-router-dom'
+import AddTrackToPlaylist from 'src/components/AddTrackToPlaylist'
 import Popover from 'src/pages/Home/components/Popover'
-import { Track } from 'src/types/playlist.type'
+import { TracksItem } from 'src/types/album.type'
+import { Playlist, Track } from 'src/types/playlist.type'
 import { millisecondsToMinutesAndSeconds } from 'src/utils/helper'
 interface Props {
   track?: Track
   index?: number
   onRemoveTrack?: () => void
+  isCurrentUserOwnPlaylist: boolean
+  currentUserPlaylists: Playlist[]
 }
 
-export default function PlaylistItem({ track, index, onRemoveTrack }: Props) {
+export default function PlaylistItem({
+  track,
+  index,
+  onRemoveTrack,
+  isCurrentUserOwnPlaylist,
+  currentUserPlaylists
+}: Props) {
   const [isOptionOpen, setIsOptionOpen] = useState(false)
   const artistsName = track?.artists && track?.artists.map((item) => item.name)
 
@@ -42,20 +52,24 @@ export default function PlaylistItem({ track, index, onRemoveTrack }: Props) {
         <Popover
           placement='left'
           renderPopover={
-            <div
-              className='z-50 flex min-w-[200px] flex-col items-start rounded-md
+            isCurrentUserOwnPlaylist ? (
+              <div
+                className='z-50 flex min-w-[200px] flex-col items-start rounded-md
 border border-gray-700 bg-[#252136] px-4 py-2 text-[20px] text-lg text-white shadow-md'
-            >
-              <button
-                className='flex items-center gap-2 px-4 py-2 hover:bg-black-custom-hover hover:text-amber-400'
-                onClick={() => {
-                  onRemoveTrack && onRemoveTrack()
-                }}
               >
-                <TiDelete className='h-6 w-6' />
-                <span>Remove from this playlist</span>
-              </button>
-            </div>
+                <button
+                  className='flex items-center gap-2 px-4 py-2 hover:bg-black-custom-hover hover:text-amber-400'
+                  onClick={() => {
+                    onRemoveTrack && onRemoveTrack()
+                  }}
+                >
+                  <TiDelete className='h-6 w-6' />
+                  <span>Remove from this playlist</span>
+                </button>
+              </div>
+            ) : (
+              <AddTrackToPlaylist userPlaylists={currentUserPlaylists} track={track as TracksItem} />
+            )
           }
         >
           <BsThreeDotsVertical

@@ -2,21 +2,22 @@
 import { useMemo } from 'react'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import { FaRegClock } from 'react-icons/fa'
+import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { config } from 'src/assets/constants/config'
 import Spinner from 'src/components/Spinner'
 import {
   useAddTrackToPlaylistMutation,
+  useGetCurrentUserPlaylistsQuery,
   useGetPlaylistQuery,
   useGetRecommendationTracksQuery,
   useRemoveTrackFromPlaylistMutation
 } from 'src/redux/apis/spotifyApi'
+import { RootState } from 'src/redux/store'
 import { formatTotalTime } from 'src/utils/helper'
 import PlaylistItem from './component/PlaylistItem/PlaylistItem'
 import RecommendedTrackItem from './component/RecommendedTrackItem/RecommendedTrackItem'
-import { toast } from 'react-toastify'
-import { useSelector } from 'react-redux'
-import { RootState } from 'src/redux/store'
 
 export default function Playlist() {
   const { id } = useParams()
@@ -60,6 +61,8 @@ export default function Playlist() {
     refetchRecommendedTracks()
   }
 
+  const { data: currentUserPlaylists, isFetching: isFetchingCurrentUserPlaylists } = useGetCurrentUserPlaylistsQuery()
+
   const handleAddTrackToCurrentPlaylist = (trackUri: string) => {
     addTrackToPlaylist({
       playlistId: playlist?.id as string,
@@ -88,7 +91,7 @@ export default function Playlist() {
       })
   }
 
-  const isLoading = isLoadingPlaylist || isLoadingRecommendedTracks
+  const isLoading = isLoadingPlaylist || isLoadingRecommendedTracks || isFetchingCurrentUserPlaylists
   return isLoading ? (
     <Spinner />
   ) : (
@@ -136,13 +139,16 @@ export default function Playlist() {
             </div>
             <div className='mb-4 mt-2 h-[1px] w-full bg-gray-600'></div>
             <div className='flex flex-col gap-2'>
-              {playlist &&
+              {currentUserPlaylists &&
+                playlist &&
                 playlist.tracks.items.map((track, index) => (
                   <PlaylistItem
                     key={track.track.id}
                     track={track.track}
                     index={index + 1}
                     onRemoveTrack={handleRemoveTrackFromPlaylist(track.track.uri)}
+                    isCurrentUserOwnPlaylist={isCurrentUserOwnPlaylist}
+                    currentUserPlaylists={currentUserPlaylists?.items}
                   />
                 ))}
             </div>
@@ -158,9 +164,16 @@ export default function Playlist() {
             Refresh
           </button>
         </div>
-        {recommendedTracks?.tracks?.map((track) => (
-          <RecommendedTrackItem key={track.id} track={track} onAddClicked={handleAddTrackToCurrentPlaylist} />
-        ))}
+        {currentUserPlaylists &&
+          recommendedTracks?.tracks?.map((track) => (
+            <RecommendedTrackItem
+              isCurrentUserOwnPlaylist={isCurrentUserOwnPlaylist}
+              currentUserPlaylists={currentUserPlaylists?.items}
+              key={track.id}
+              track={track}
+              onAddClicked={handleAddTrackToCurrentPlaylist}
+            />
+          ))}
       </div>
     </>
   )
