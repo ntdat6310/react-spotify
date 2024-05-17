@@ -1,6 +1,6 @@
 import { BaseQueryFn, createApi } from '@reduxjs/toolkit/query/react'
 import axios, { AxiosError, AxiosRequestConfig } from 'axios'
-import { Album, Albums, CurrentUserAlbums } from 'src/types/album.type'
+import { Album, Albums, CurrentUserAlbums, Tracks } from 'src/types/album.type'
 import { AuthSpotify } from 'src/types/auth.type'
 import { Playlist, Playlists, Track } from 'src/types/playlist.type'
 import { UserProfile } from 'src/types/user.type'
@@ -212,6 +212,20 @@ export const spotifyApi = createApi({
         url: `/users/${user_id}/playlists`,
         method: 'GET'
       })
+    }),
+    searchTrack: builder.query<{ tracks: Tracks }, string>({
+      query: (search_key) => ({
+        url: `/search`,
+        method: 'GET',
+        params: {
+          q: search_key,
+          type: 'track',
+          limit: 20,
+          offset: 0,
+          include_external: 'audio'
+        }
+      }),
+      keepUnusedDataFor: 0
     })
   })
 })
@@ -233,5 +247,6 @@ export const {
   useGetRecommendationTracksQuery,
   useRemoveTrackFromPlaylistMutation,
   useGetUserProfileQuery,
-  useGetUserPlaylistsQuery
+  useGetUserPlaylistsQuery,
+  useSearchTrackQuery
 } = spotifyApi

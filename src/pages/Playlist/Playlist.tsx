@@ -99,7 +99,10 @@ export default function Playlist() {
       <div className='flex flex-wrap items-end justify-center gap-4 px-4'>
         <div className='h-[250px] w-[250px] shrink-0'>
           <img
-            src={(playlist && playlist.images.length > 0 && playlist.images[0].url) || config.default_image}
+            src={
+              (playlist && playlist.images && playlist.images?.length > 0 && playlist.images[0].url) ||
+              config.default_image
+            }
             alt='playlist_img'
             className='h-full w-full rounded-md object-cover'
           />
@@ -110,7 +113,10 @@ export default function Playlist() {
           <div className='flex items-center gap-3'>
             <div className='h-10 w-10'>
               <img
-                src={(playlist && playlist.images.length > 0 && playlist.images[0].url) || config.default_image}
+                src={
+                  (playlist && playlist.images && playlist.images?.length > 0 && playlist.images[0].url) ||
+                  config.default_image
+                }
                 alt='playlist_img'
                 className='h-full w-full rounded-full object-cover'
               />

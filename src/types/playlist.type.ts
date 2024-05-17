@@ -13,7 +13,7 @@ export interface Playlist {
   description: string
   href: string
   id: string
-  images: Image[]
+  images: Image[] | null
   name: string
   owner: Owner
   primary_color: string

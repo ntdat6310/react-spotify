@@ -36,7 +36,7 @@ export default function Sidebar() {
           <HiOutlineHome className='h-6 w-6' />
           <span className='text-lg font-bold'>Home</span>
         </Link>
-        <Link to='#' className='flex items-center gap-x-4 transition-all hover:text-white'>
+        <Link to='/search' className='flex items-center gap-x-4 transition-all hover:text-white'>
           <HiOutlineSearch className='h-6 w-6' />
           <span className='text-lg font-bold'>Search</span>
         </Link>
@@ -65,11 +65,11 @@ export default function Sidebar() {
           className='h-8 w-8 shrink-0 cursor-pointer self-end'
         />
         {profile && <UserDropdownMenu profile={profile} />}
-        <Link to='#' className='flex items-center gap-x-4 transition-all hover:text-white'>
+        <Link to='/' className='flex items-center gap-x-4 transition-all hover:text-white'>
           <HiOutlineHome className='h-6 w-6' />
           <span className='text-lg font-bold'>Home</span>
         </Link>
-        <Link to='#' className='flex items-center gap-x-4 transition-all hover:text-white'>
+        <Link to='/search' className='flex items-center gap-x-4 transition-all hover:text-white'>
           <HiOutlineSearch className='h-6 w-6' />
           <span className='text-lg font-bold'>Search</span>
         </Link>

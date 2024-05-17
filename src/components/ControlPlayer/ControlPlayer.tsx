@@ -35,7 +35,7 @@ export default function ControlPlayer() {
         </div>
         <div className='flex items-center gap-x-2 text-white'>
           <span>0:00</span>
-          <input type='range' min={0} max={100} value={50} className='w-[400px]' />
+          <input type='range' min={0} max={100} className='w-[400px]' />
           <span>4:00</span>
         </div>
       </div>
