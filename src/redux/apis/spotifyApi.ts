@@ -1,6 +1,6 @@
 import { BaseQueryFn, createApi } from '@reduxjs/toolkit/query/react'
 import axios, { AxiosError, AxiosRequestConfig } from 'axios'
-import { Album, Albums, CurrentUserAlbums, Tracks } from 'src/types/album.type'
+import { Album, Albums, ArtistWithImage, CurrentUserAlbums, Tracks } from 'src/types/album.type'
 import { AuthSpotify } from 'src/types/auth.type'
 import { Playlist, Playlists, Track } from 'src/types/playlist.type'
 import { UserProfile } from 'src/types/user.type'
@@ -213,19 +213,49 @@ export const spotifyApi = createApi({
         method: 'GET'
       })
     }),
-    searchTrack: builder.query<{ tracks: Tracks }, string>({
-      query: (search_key) => ({
+    searchTrack: builder.query<{ tracks: Tracks }, { search_key: string }>({
+      query: ({ search_key }) => ({
         url: `/search`,
         method: 'GET',
         params: {
           q: search_key,
           type: 'track',
-          limit: 20,
-          offset: 0,
           include_external: 'audio'
         }
-      }),
-      keepUnusedDataFor: 0
+      })
+    }),
+    searchPlaylist: builder.query<{ playlists: Playlists }, { search_key: string }>({
+      query: ({ search_key }) => ({
+        url: `/search`,
+        method: 'GET',
+        params: {
+          q: search_key,
+          type: 'playlist',
+          include_external: 'audio'
+        }
+      })
+    }),
+    searchAlbum: builder.query<{ albums: Albums }, { search_key: string }>({
+      query: ({ search_key }) => ({
+        url: `/search`,
+        method: 'GET',
+        params: {
+          q: search_key,
+          type: 'album',
+          include_external: 'audio'
+        }
+      })
+    }),
+    searchArtist: builder.query<{ artists: { items: ArtistWithImage[] } }, { search_key: string }>({
+      query: ({ search_key }) => ({
+        url: `/search`,
+        method: 'GET',
+        params: {
+          q: search_key,
+          type: 'artist',
+          include_external: 'audio'
+        }
+      })
     })
   })
 })
@@ -248,5 +278,8 @@ export const {
   useRemoveTrackFromPlaylistMutation,
   useGetUserProfileQuery,
   useGetUserPlaylistsQuery,
-  useSearchTrackQuery
+  useSearchTrackQuery,
+  useSearchAlbumQuery,
+  useSearchArtistQuery,
+  useSearchPlaylistQuery
 } = spotifyApi

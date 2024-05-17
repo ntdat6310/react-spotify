@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useGetFeaturedPlaylistsQuery, useGetNewReleasedAlbumsQuery } from 'src/redux/apis/spotifyApi'
 import PlaylistCard from './components/PlaylistCard'
 import Spinner from 'src/components/Spinner'
+import { config } from 'src/assets/constants/config'
 
 export default function Home() {
   const navigate = useNavigate()
@@ -27,7 +28,7 @@ export default function Home() {
           {featuredPlaylists?.playlists.items.map((item) => (
             <PlaylistCard
               key={item.id}
-              imgUrl={item.images[0].url}
+              imgUrl={(item?.images && item.images.length > 0 && item.images.at(0)?.url) || config.default_image}
               title={item.name}
               author={item.owner.display_name}
               onClick={handlePlaylistClicked(item.id)}
@@ -42,7 +43,7 @@ export default function Home() {
           {newReleasedAlbums?.albums.items.map((item) => (
             <PlaylistCard
               key={item.id}
-              imgUrl={item.images.length > 0 ? item.images[0].url : undefined}
+              imgUrl={item?.images?.length > 0 ? item.images[0]?.url : undefined}
               title={item.name}
               author={item.artists.length > 0 ? item.artists[0].name : undefined}
               onClick={handleAlbumClicked(item.id)}

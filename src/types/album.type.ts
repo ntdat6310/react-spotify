@@ -40,6 +40,10 @@ export interface Artist {
   uri: string
 }
 
+export interface ArtistWithImage extends Artist {
+  images: Image[]
+}
+
 export interface Image {
   url: string
   height: number

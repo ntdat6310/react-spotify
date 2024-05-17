@@ -3,8 +3,16 @@ import { useState } from 'react'
 import { IoSearchOutline } from 'react-icons/io5'
 import { createSearchParams, useNavigate } from 'react-router-dom'
 import useQueryParams from 'src/hooks/useQueryParams'
-import { useSearchTrackQuery } from 'src/redux/apis/spotifyApi'
+import {
+  useSearchAlbumQuery,
+  useSearchArtistQuery,
+  useSearchPlaylistQuery,
+  useSearchTrackQuery
+} from 'src/redux/apis/spotifyApi'
 import SearchTrack from './SearchTrack/SearchTrack'
+import SearchPlaylist from './SearchPlaylist'
+import SearchArtist from './SearchArtist'
+import SearchAlbum from './SearchAlbum'
 
 enum SearchType {
   track = 'Track',
@@ -24,27 +32,51 @@ export default function Search() {
   const isSearchReady = Boolean(queryParams.searchKey && queryParams.searchType)
 
   const handleSearchTypeSelected = (searchType: SearchType) => () => {
-    if (queryParams.searchKey) {
-      navigate({
-        pathname: '/search',
-        search: createSearchParams({
-          ...queryParams,
-          searchType: searchType
-        }).toString()
-      })
-    } else {
-      navigate({
-        pathname: '/search',
-        search: createSearchParams({
-          searchType: searchType
-        }).toString()
-      })
-    }
+    navigate({
+      pathname: '/search',
+      search: createSearchParams({
+        ...queryParams,
+        searchType: searchType
+      }).toString()
+    })
   }
-  const { data: tracks } = useSearchTrackQuery(queryParams.searchKey, {
-    skip:
-      Boolean(!queryParams.searchKey) || (Boolean(queryParams.searchKey) && queryParams.searchType != SearchType.track)
-  })
+  const { data: tracks } = useSearchTrackQuery(
+    { search_key: queryParams.searchKey },
+    {
+      skip:
+        Boolean(!queryParams.searchKey) ||
+        (Boolean(queryParams.searchKey) && queryParams.searchType != SearchType.track)
+    }
+  )
+
+  const { data: playlists } = useSearchPlaylistQuery(
+    { search_key: queryParams.searchKey },
+    {
+      skip:
+        Boolean(!queryParams.searchKey) ||
+        (Boolean(queryParams.searchKey) && queryParams.searchType != SearchType.playlist)
+    }
+  )
+
+  const { data: albums } = useSearchAlbumQuery(
+    { search_key: queryParams.searchKey },
+    {
+      skip:
+        Boolean(!queryParams.searchKey) ||
+        (Boolean(queryParams.searchKey) && queryParams.searchType != SearchType.album)
+    }
+  )
+
+  const { data: artists } = useSearchArtistQuery(
+    { search_key: queryParams.searchKey },
+    {
+      skip:
+        Boolean(!queryParams.searchKey) ||
+        (Boolean(queryParams.searchKey) && queryParams.searchType != SearchType.artist)
+    }
+  )
+
+  console.log('artists', artists?.artists.items[0].images)
 
   return (
     <div className='mx-2 text-white'>
@@ -116,7 +148,23 @@ export default function Search() {
         </div>
       )}
 
+      {/* Tracks */}
       {isSearchReady && queryParams.searchType == SearchType.track && tracks && <SearchTrack tracks={tracks.tracks} />}
+
+      {/* Playlists */}
+      {isSearchReady && queryParams.searchType == SearchType.playlist && playlists?.playlists && (
+        <SearchPlaylist playlists={playlists.playlists} />
+      )}
+
+      {/* Albums */}
+      {isSearchReady && queryParams.searchType == SearchType.album && albums?.albums && (
+        <SearchAlbum albums={albums.albums} />
+      )}
+
+      {/* Artists */}
+      {isSearchReady && queryParams.searchType == SearchType.artist && artists && (
+        <SearchArtist artists={artists.artists.items} />
+      )}
     </div>
   )
 }

@@ -17,7 +17,7 @@ export interface Playlist {
   name: string
   owner: Owner
   primary_color: string
-  public: boolean
+  public: boolean | null
   snapshot_id: string
   tracks: Tracks
   type: string
