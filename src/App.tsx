@@ -1,15 +1,18 @@
+/* eslint-disable jsx-a11y/media-has-caption */
+import { useContext, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import useRouteElements from './routes/useRouteElements'
-import { LocalStorageEventTarget, getAccessTokenFromLS } from './utils/auth'
-import { reset, setProfile } from './redux/slices/profile.slice'
-import { useEffect } from 'react'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { useGetCurrentUserProfileQuery } from './redux/apis/spotifyApi'
 import Spinner from './components/Spinner'
+import { PlayerContext } from './context/PlayerContext'
+import { useGetCurrentUserProfileQuery } from './redux/apis/spotifyApi'
+import { reset, setProfile } from './redux/slices/profile.slice'
+import useRouteElements from './routes/useRouteElements'
+import { LocalStorageEventTarget, getAccessTokenFromLS } from './utils/auth'
 
 function App() {
   const dispatch = useDispatch()
+  const { audioRef, currentTrack } = useContext(PlayerContext)
   const access_token = getAccessTokenFromLS()
 
   const { data: profile, isLoading } = useGetCurrentUserProfileQuery(undefined, {
@@ -30,6 +33,7 @@ function App() {
   }, [dispatch])
 
   const routeElements = useRouteElements()
+  const url = currentTrack && currentTrack.preview_url ? currentTrack.preview_url : ''
   return isLoading ? (
     <div className='h-screen w-screen bg-black-custom'>
       <Spinner />
@@ -38,6 +42,7 @@ function App() {
     <div>
       <ToastContainer />
       {routeElements}
+      <audio ref={audioRef} src={url} preload='auto'></audio>
     </div>
   )
 }

@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
-import { useMemo } from 'react'
+import { useContext, useEffect, useMemo } from 'react'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import { FaRegClock } from 'react-icons/fa'
 import { useSelector } from 'react-redux'
@@ -18,6 +18,8 @@ import { RootState } from 'src/redux/store'
 import { formatTotalTime } from 'src/utils/helper'
 import PlaylistItem from './component/PlaylistItem/PlaylistItem'
 import RecommendedTrackItem from './component/RecommendedTrackItem/RecommendedTrackItem'
+import { Track } from 'src/types/playlist.type'
+import { PlayerContext } from 'src/context/PlayerContext'
 
 export default function Playlist() {
   const { id } = useParams()
@@ -91,6 +93,15 @@ export default function Playlist() {
       })
   }
 
+  const { setTracksQueue, setCurrentTrack } = useContext(PlayerContext)
+  useEffect(() => {
+    if (playlist) {
+      const tracks: Track[] = playlist.tracks?.items.map((track) => track.track)
+      setTracksQueue && setTracksQueue(tracks)
+      setCurrentTrack && setCurrentTrack(tracks.length > 0 ? tracks[0] : undefined)
+    }
+  }, [playlist, setTracksQueue, setCurrentTrack])
+
   const isLoading = isLoadingPlaylist || isLoadingRecommendedTracks || isFetchingCurrentUserPlaylists
   return isLoading ? (
     <Spinner />
@@ -149,7 +160,7 @@ export default function Playlist() {
                 playlist &&
                 playlist.tracks.items.map((track, index) => (
                   <PlaylistItem
-                    key={track.track.id}
+                    key={track.track.id + index}
                     track={track.track}
                     index={index + 1}
                     onRemoveTrack={handleRemoveTrackFromPlaylist(track.track.uri)}

@@ -1,7 +1,9 @@
 import classNames from 'classnames'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { BsThreeDotsVertical } from 'react-icons/bs'
+
 import { TiDelete } from 'react-icons/ti'
+import { FaPlay, FaPause } from 'react-icons/fa6'
 
 import { Link } from 'react-router-dom'
 import AddTrackToPlaylist from 'src/components/AddTrackToPlaylist'
@@ -9,6 +11,7 @@ import Popover from 'src/pages/Home/components/Popover'
 import { TracksItem } from 'src/types/album.type'
 import { Playlist, Track } from 'src/types/playlist.type'
 import { millisecondsToMinutesAndSeconds } from 'src/utils/helper'
+import { PlayerContext } from 'src/context/PlayerContext'
 interface Props {
   track?: Track
   index?: number
@@ -25,8 +28,12 @@ export default function PlaylistItem({
   currentUserPlaylists
 }: Props) {
   const [isOptionOpen, setIsOptionOpen] = useState(false)
+  const [isHover, setIsHover] = useState(false)
   const artistsName = track?.artists && track?.artists.map((item) => item.name)
 
+  const { playNewTrack, currentTrack, playStatus, pause } = useContext(PlayerContext)
+  const isCurrentTrackPlaying = currentTrack?.id === track?.id && playStatus
+  const isTrackhavingPreviewUrl = Boolean(track?.preview_url)
   return (
     <div
       className={classNames('grid grid-cols-12 gap-x-1 py-2 hover:bg-black-custom-hover', {
@@ -34,9 +41,44 @@ export default function PlaylistItem({
       })}
       onMouseLeave={() => {
         setIsOptionOpen(false)
+        setIsHover(false)
+      }}
+      onMouseEnter={() => {
+        setIsHover(true)
       }}
     >
-      <div className='col-span-1 text-center'>{index}</div>
+      <div className='col-span-1 text-center'>
+        {isTrackhavingPreviewUrl && isCurrentTrackPlaying && (
+          <div className='flex h-full items-center justify-center'>
+            <FaPause
+              className='h-5 w-5 cursor-pointer text-pink-500'
+              onClick={() => {
+                pause && pause()
+              }}
+            />
+          </div>
+        )}
+        {isTrackhavingPreviewUrl &&
+          !isCurrentTrackPlaying &&
+          (isHover ? (
+            <div className='flex h-full items-center justify-center'>
+              <FaPlay
+                className='h-5 w-5 cursor-pointer text-white'
+                onClick={() => {
+                  track && playNewTrack(track)
+                }}
+              />
+            </div>
+          ) : (
+            <span>{index}</span>
+          ))}
+
+        {!isTrackhavingPreviewUrl && (
+          <div className='flex h-full items-center justify-center'>
+            <span>{index}</span>
+          </div>
+        )}
+      </div>
       <div className='col-span-5 line-clamp-1'>{track?.name}</div>
       <div className='col-span-2 line-clamp-1'>{artistsName?.join(', ')}</div>
       <Link

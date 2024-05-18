@@ -28,7 +28,9 @@ export function formatTotalTime(milliseconds: number): string {
 }
 
 export function millisecondsToMinutesAndSeconds(milliseconds: number): string {
-  const totalSeconds = Math.floor(milliseconds / 1000)
+  const newMilliseconds = !isNaN(Number(milliseconds)) ? milliseconds : 0
+
+  const totalSeconds = Math.floor(newMilliseconds / 1000)
 
   const minutes = Math.floor(totalSeconds / 60)
   const seconds = totalSeconds % 60
