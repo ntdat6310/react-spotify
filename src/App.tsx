@@ -12,7 +12,7 @@ import { LocalStorageEventTarget, getAccessTokenFromLS } from './utils/auth'
 
 function App() {
   const dispatch = useDispatch()
-  const { audioRef, currentTrack } = useContext(PlayerContext)
+  const { audioRef, currentTrack, onAudioEnded } = useContext(PlayerContext)
   const access_token = getAccessTokenFromLS()
 
   const { data: profile, isLoading } = useGetCurrentUserProfileQuery(undefined, {
@@ -42,7 +42,7 @@ function App() {
     <div>
       <ToastContainer />
       {routeElements}
-      <audio ref={audioRef} src={url} preload='auto'></audio>
+      <audio ref={audioRef} src={url} onEnded={onAudioEnded} preload='auto'></audio>
     </div>
   )
 }

@@ -76,8 +76,6 @@ export default function Search() {
     }
   )
 
-  console.log('artists', artists?.artists.items[0].images)
-
   return (
     <div className='mx-2 text-white'>
       <form

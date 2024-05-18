@@ -8,12 +8,11 @@ import { PlayerContext } from 'src/context/PlayerContext'
 import VolumnControl from '../VolumnControl'
 import { config } from 'src/assets/constants/config'
 import { millisecondsToMinutesAndSeconds } from 'src/utils/helper'
+import classNames from 'classnames'
 
 export default function ControlPlayer() {
-  const { play, pause, currentTrack, playStatus, time, seekBarRef, setSeekTime } = useContext(PlayerContext)
-
-  let seekBarTime = Math.floor((time.currentTime / time.totalTime) * 100)
-  seekBarTime = !isNaN(seekBarTime) ? seekBarTime : 0
+  const { play, pause, currentTrack, playStatus, time, seekBarRef, setSeekTime, loop, toggleLoop } =
+    useContext(PlayerContext)
 
   return (
     <div className='flex h-full items-center justify-between border-t border-gray-800 bg-black px-4 py-2'>
@@ -38,8 +37,8 @@ export default function ControlPlayer() {
       </div>
       <div className=' hidden flex-col items-center justify-between gap-2 xl:flex'>
         <div className='flex items-center gap-x-5 text-white'>
-          <BsShuffle className='h-5 w-5' />
-          <CgPlayTrackPrev className='h-8 w-8' />
+          <BsShuffle className='h-5 w-5 cursor-pointer' />
+          <CgPlayTrackPrev className='h-8 w-8 cursor-pointer' />
           {playStatus ? (
             <BsFillPauseCircleFill
               className='h-7 w-7 cursor-pointer text-white'
@@ -56,13 +55,19 @@ export default function ControlPlayer() {
             />
           )}
 
-          <CgPlayTrackNext className='h-8 w-8' />
-          <FiRepeat className='h-5 w-5' />
+          <CgPlayTrackNext className='h-8 w-8 cursor-pointer' />
+          <FiRepeat
+            className={classNames('h-5 w-5 cursor-pointer', {
+              'text-blue-500': loop,
+              'text-white': !loop
+            })}
+            onClick={toggleLoop}
+          />
         </div>
         <div className='flex items-center gap-x-2 text-white'>
           <span>{millisecondsToMinutesAndSeconds(time.currentTime * 1000)}</span>
           <div className='w-[350px] cursor-pointer bg-white' onClick={setSeekTime}>
-            <hr ref={seekBarRef} className={`pointer-events-none h-[6px] w-0 border-0 bg-blue-500`}></hr>
+            <hr ref={seekBarRef} className={` h-[6px] w-0 border-0 bg-blue-500`}></hr>
           </div>
           <span>{millisecondsToMinutesAndSeconds(time.totalTime * 1000)}</span>
         </div>
@@ -71,7 +76,7 @@ export default function ControlPlayer() {
         <VolumnControl />
       </div>
       <div className='xl:hidden'>
-        <BsFillPauseCircleFill className='h-8 w-8 text-white' />
+        <BsFillPauseCircleFill className='h-8 w-8 cursor-pointer text-white' />
       </div>
     </div>
   )

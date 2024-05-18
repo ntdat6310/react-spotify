@@ -19,6 +19,10 @@ interface PlayerContextInterface {
   }
   setSeekTime: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
   seekBarRef: React.MutableRefObject<null> | undefined
+  onAudioEnded: (event: React.SyntheticEvent<HTMLAudioElement, Event>) => void
+  loop: boolean
+  toggleLoop: () => void
+  changeVolumn: (volumn: number) => void
 }
 
 const initialState: PlayerContextInterface = {
@@ -36,7 +40,11 @@ const initialState: PlayerContextInterface = {
     totalTime: 0
   },
   setSeekTime: () => {},
-  seekBarRef: undefined
+  seekBarRef: undefined,
+  onAudioEnded: () => {},
+  loop: false,
+  toggleLoop: () => {},
+  changeVolumn: () => {}
 }
 export const PlayerContext = createContext<PlayerContextInterface>(initialState)
 
@@ -47,8 +55,9 @@ export const PlayerContextProvider = ({ children }: Props) => {
   const audioRef = useRef(new Audio())
   const [currentTrack, setCurrentTrack] = useState<Track | undefined>(initialState.currentTrack)
   const [tracksQueue, setTracksQueue] = useState<Track[]>(initialState.tracksQueue)
-  const [playStatus, setPlayStatus] = useState(false)
+  const [playStatus, setPlayStatus] = useState(initialState.playStatus)
   const [time, setTime] = useState(initialState.time)
+  const [loop, setLoop] = useState(initialState.loop)
   const seekBarRef = useRef(null)
 
   const play = () => {
@@ -94,24 +103,37 @@ export const PlayerContextProvider = ({ children }: Props) => {
     }
   }, [audioRef])
 
+  // Handle seekbar
   useEffect(() => {
     if (audioRef.current.duration !== 0 && seekBarRef.current) {
       ;(seekBarRef.current as any).style.width = Math.floor((time.currentTime / time.totalTime) * 100) + '%'
     }
+    if (audioRef.current.ended) {
+      ;(seekBarRef.current as any).style.width = '0%'
+    }
   }, [time])
 
   const setSeekTime = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    const target = event.target as HTMLDivElement
-    const width = target.clientWidth
-    console.log(
-      event.nativeEvent.offsetX,
-      width,
-      (Math.floor((event.nativeEvent.offsetX / Number(width)) * 100) / 100) * audioRef.current.duration
-    )
     audioRef.current.currentTime =
-      (Math.floor((event.nativeEvent.offsetX / Number(width)) * 100) / 100) * audioRef.current.duration
+      (Math.floor((event.nativeEvent.offsetX / Number(event.currentTarget.clientWidth)) * 100) / 100) *
+      audioRef.current.duration
   }
 
+  const onAudioEnded = (event: React.SyntheticEvent<HTMLAudioElement, Event>) => {
+    setPlayStatus(false)
+  }
+
+  const toggleLoop = () => {
+    setLoop((prev) => !prev)
+  }
+
+  useEffect(() => {
+    audioRef.current.loop = loop
+  }, [loop])
+
+  const changeVolumn = (volumn: number) => {
+    audioRef.current.volume = volumn / 100
+  }
   return (
     <PlayerContext.Provider
       value={{
@@ -126,7 +148,11 @@ export const PlayerContextProvider = ({ children }: Props) => {
         playStatus,
         time,
         setSeekTime,
-        seekBarRef
+        seekBarRef,
+        onAudioEnded,
+        loop,
+        toggleLoop,
+        changeVolumn
       }}
     >
       {children}
