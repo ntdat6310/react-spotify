@@ -56,6 +56,7 @@ const axiosBaseQuery =
 export const spotifyApi = createApi({
   reducerPath: 'spotifyApi',
   baseQuery: axiosBaseQuery({ baseUrl: 'https://api.spotify.com/v1' }),
+  tagTypes: ['Album'],
   endpoints: (builder) => ({
     getTokens: builder.query<AuthSpotify, string>({
       query: (code) => {
@@ -89,6 +90,9 @@ export const spotifyApi = createApi({
           url: '/me/albums',
           method: 'GET'
         }
+      },
+      providesTags() {
+        return [{ type: 'Album', id: 'RE_FETCH' }]
       }
     }),
     getCurrentUserProfile: builder.query<UserProfile, void>({
@@ -146,7 +150,8 @@ export const spotifyApi = createApi({
         data: {
           ids: [id]
         }
-      })
+      }),
+      invalidatesTags: () => [{ type: 'Album', id: 'RE_FETCH' }]
     }),
     removeAlbumForCurrentUser: builder.mutation<void, string>({
       query: (id) => ({
@@ -155,7 +160,8 @@ export const spotifyApi = createApi({
         data: {
           ids: [id]
         }
-      })
+      }),
+      invalidatesTags: () => [{ type: 'Album', id: 'RE_FETCH' }]
     }),
     isAlbumSaved: builder.query<boolean[], string>({
       query: (id) => ({
