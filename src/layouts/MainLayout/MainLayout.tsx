@@ -1,5 +1,6 @@
 import ControlPlayer from 'src/components/ControlPlayer'
 import Sidebar from 'src/pages/Home/components/Sidebar'
+import TrackQueueModal from 'src/components/TrackQueueModal'
 
 interface Props {
   children?: React.ReactNode
@@ -9,6 +10,7 @@ export default function MainLayout({ children }: Props) {
     <>
       <div className='relative flex h-[85vh] w-full bg-black-custom font-body'>
         <Sidebar />
+        <TrackQueueModal />
         <div className='hide-scrollbar mt-20 grow overflow-y-auto px-2'>{children}</div>
       </div>
       <div className='h-[15vh] '>

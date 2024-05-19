@@ -53,7 +53,7 @@ export default function Sidebar() {
       {/* Mobile, Tablet sidebar*/}
       <nav
         className={classNames(
-          'absolute top-0 z-50 flex h-screen w-[80%] flex-col gap-4 bg-black px-4 py-6 text-gray-300  transition-all lg:hidden',
+          'absolute top-0 z-50 flex h-full w-[80%] flex-col gap-4 bg-black px-4 py-6 text-gray-300  transition-all lg:hidden',
           { 'left-0': isMobileMenuOpen },
           { '-left-full': !isMobileMenuOpen }
         )}

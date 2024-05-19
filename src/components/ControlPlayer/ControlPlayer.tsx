@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import classNames from 'classnames'
 import { useContext } from 'react'
+import { PiQueue } from 'react-icons/pi'
 import { BsFillPauseCircleFill, BsFillPlayCircleFill } from 'react-icons/bs'
 import { CgPlayTrackNext, CgPlayTrackPrev } from 'react-icons/cg'
 import { FiRepeat } from 'react-icons/fi'
@@ -29,7 +30,8 @@ export default function ControlPlayer() {
     next,
     previous,
     isNextAvailable,
-    isPreviousAvailable
+    isPreviousAvailable,
+    toggleTracksQueueModal
   } = useContext(PlayerContext)
 
   return (
@@ -117,27 +119,31 @@ export default function ControlPlayer() {
           <span>{millisecondsToMinutesAndSeconds(time.totalTime * 1000)}</span>
         </div>
       </div>
-      <div className='hidden px-4 xl:block'>
+      <div className='hidden cursor-pointer items-center gap-3 px-4 xl:flex'>
+        <PiQueue className='h-7 w-7 text-white' onClick={toggleTracksQueueModal} />
         <VolumnControl />
       </div>
       <div className='xl:hidden'>
-        {!currentTrack && <BsFillPlayCircleFill className='h-8 w-8 cursor-not-allowed text-gray-500' />}
-        {currentTrack &&
-          (playStatus ? (
-            <BsFillPauseCircleFill
-              className='h-8 w-8 cursor-pointer text-white'
-              onClick={() => {
-                pause()
-              }}
-            />
-          ) : (
-            <BsFillPlayCircleFill
-              className='h-8 w-8 cursor-pointer text-white'
-              onClick={() => {
-                play()
-              }}
-            />
-          ))}
+        <div className='flex items-center gap-4'>
+          <PiQueue className='h-7 w-7 text-white' onClick={toggleTracksQueueModal} />
+          {!currentTrack && <BsFillPlayCircleFill className='h-8 w-8 cursor-not-allowed text-gray-500' />}
+          {currentTrack &&
+            (playStatus ? (
+              <BsFillPauseCircleFill
+                className='h-8 w-8 cursor-pointer text-white'
+                onClick={() => {
+                  pause()
+                }}
+              />
+            ) : (
+              <BsFillPlayCircleFill
+                className='h-8 w-8 cursor-pointer text-white'
+                onClick={() => {
+                  play()
+                }}
+              />
+            ))}
+        </div>
       </div>
     </div>
   )

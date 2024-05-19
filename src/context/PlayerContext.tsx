@@ -30,6 +30,10 @@ interface PlayerContextInterface {
   previous: () => void
   isNextAvailable: boolean
   isPreviousAvailable: boolean
+  isTracksQueueModalOpen: boolean
+  toggleTracksQueueModal: () => void
+  removeSpecificTrackFromQueue: (id: string) => void
+  removeAllTracksFromQueue: () => void
 }
 
 const initialState: PlayerContextInterface = {
@@ -58,7 +62,11 @@ const initialState: PlayerContextInterface = {
   next: () => {},
   previous: () => {},
   isNextAvailable: false,
-  isPreviousAvailable: false
+  isPreviousAvailable: false,
+  isTracksQueueModalOpen: false,
+  toggleTracksQueueModal: () => {},
+  removeSpecificTrackFromQueue: () => {},
+  removeAllTracksFromQueue: () => {}
 }
 export const PlayerContext = createContext<PlayerContextInterface>(initialState)
 
@@ -72,7 +80,12 @@ export const PlayerContextProvider = ({ children }: Props) => {
   const [playStatus, setPlayStatus] = useState(initialState.playStatus)
   const [time, setTime] = useState(initialState.time)
   const [loop, setLoop] = useState(initialState.loop)
+  const [isTracksQueueModalOpen, setIsTracksQueueModalOpen] = useState(initialState.isTracksQueueModalOpen)
   const seekBarRef = useRef(null)
+
+  const toggleTracksQueueModal = () => {
+    setIsTracksQueueModalOpen((prev) => !prev)
+  }
 
   const isTrackQueueContainingCurrentTrack = useMemo(() => {
     return tracksQueue.some((track) => track.id === currentTrack?.id)
@@ -203,13 +216,32 @@ export const PlayerContextProvider = ({ children }: Props) => {
     setLoop((prev) => !prev)
   }
 
-  console.log(tracksQueue)
   useEffect(() => {
     audioRef.current.loop = loop
   }, [loop])
 
   const changeVolumn = (volumn: number) => {
     audioRef.current.volume = volumn / 100
+  }
+
+  const removeSpecificTrackFromQueue = (id: string) => {
+    toast.success('Track is removed', {
+      autoClose: 1000,
+      position: 'top-center'
+    })
+    setTracksQueue((prev) => {
+      return prev.filter((track) => track.id !== id)
+    })
+  }
+
+  const removeAllTracksFromQueue = () => {
+    if (tracksQueue.length > 0) {
+      toast.success('All tracks is removed', {
+        autoClose: 1000,
+        position: 'top-center'
+      })
+      setTracksQueue([])
+    }
   }
   return (
     <PlayerContext.Provider
@@ -236,7 +268,11 @@ export const PlayerContextProvider = ({ children }: Props) => {
         next,
         previous,
         isNextAvailable,
-        isPreviousAvailable
+        isPreviousAvailable,
+        isTracksQueueModalOpen,
+        toggleTracksQueueModal,
+        removeSpecificTrackFromQueue,
+        removeAllTracksFromQueue
       }}
     >
       {children}
