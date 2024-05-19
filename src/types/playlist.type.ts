@@ -1,4 +1,4 @@
-import { Album, Artist, Image } from './album.type'
+import { Album, Image, TracksItem } from './album.type'
 
 export interface Playlists {
   href: string
@@ -36,26 +36,13 @@ interface Tracks {
   href: string
   items: {
     added_at: string
-    track: Track
+    track: Track | null
   }[]
   limit: number
   offset: number
   total: number
 }
 
-export interface Track {
+export interface Track extends TracksItem {
   album: Album
-  artists: Artist[]
-  available_markets: string[]
-  disc_number: number
-  duration_ms: number
-  explicit: boolean
-  href: string
-  id: string
-  is_local: boolean
-  name: string
-  preview_url: string | null
-  track_number: number
-  type: string
-  uri: string
 }

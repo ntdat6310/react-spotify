@@ -25,7 +25,7 @@ border border-gray-700 bg-[#252136] px-4 py-2 text-[20px] text-lg text-white sha
         {userPlaylists.slice(0, 10).map((playlist) => (
           <button
             key={playlist.id}
-            className='hover:bg-black-custom-hover  max-w-[400px] px-3 py-1 text-start'
+            className='max-w-[400px] px-3 py-1 text-start hover:bg-black-custom-hover'
             onClick={() => {
               addTrackToPlaylist({
                 playlistId: playlist.id,

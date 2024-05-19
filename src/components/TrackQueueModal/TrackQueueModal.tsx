@@ -49,10 +49,23 @@ export default function TrackQueueModal() {
           }
         )}
       >
-        <TiDelete
-          onClick={toggleTracksQueueModal}
-          className='ml-auto flex h-10 w-10 cursor-pointer text-gray-300 hover:text-white'
-        />
+        <div className='flex items-center justify-between'>
+          <button
+            className='rounded-md border border-gray-500 px-3 py-2 font-semibold hover:border-purple-700 hover:bg-black-custom-hover hover:text-white'
+            onClick={removeAllTracksFromQueue}
+          >
+            Clear all
+          </button>
+          <TiDelete
+            onClick={toggleTracksQueueModal}
+            className='h-10 w-10 cursor-pointer text-gray-300 hover:text-white'
+          />
+        </div>
+        <div className='hide-scrollbar flex flex-col gap-4 overflow-y-auto py-4'>
+          {tracksQueue.map((track, index) => (
+            <TrackQueueItem key={index} track={track} />
+          ))}
+        </div>
       </nav>
     </>
   )

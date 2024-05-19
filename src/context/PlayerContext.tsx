@@ -201,7 +201,7 @@ export const PlayerContextProvider = ({ children }: Props) => {
       audioRef.current.duration
   }
 
-  const onAudioEnded = (event: React.SyntheticEvent<HTMLAudioElement, Event>) => {
+  const onAudioEnded = () => {
     if (isNextAvailable) {
       next()
     } else if (tracksQueue.length > 0) {

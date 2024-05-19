@@ -78,7 +78,7 @@ export default function Sidebar() {
           <HiOutlineMenuAlt2 className='h-6 w-6' />
           <span className='text-lg font-bold'>Your Library</span>
         </div>
-        <div className='hide-scrollbar flex flex-col gap-4 overflow-y-auto'>
+        <div className='hide-scrollbar flex flex-col gap-4 overflow-y-auto py-4'>
           <Playlists playlists={playlists} />
           <Albums albums={albums} />
         </div>

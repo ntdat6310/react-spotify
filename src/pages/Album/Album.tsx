@@ -146,7 +146,12 @@ export default function Album() {
               {album &&
                 album.tracks &&
                 album.tracks.items.map((track) => (
-                  <AlbumItem key={track.id} track={track} userPlaylists={currentUserPlaylists?.items} />
+                  <AlbumItem
+                    key={track.id}
+                    currentAlbum={album}
+                    track={track}
+                    userPlaylists={currentUserPlaylists?.items}
+                  />
                 ))}
             </div>
           </div>

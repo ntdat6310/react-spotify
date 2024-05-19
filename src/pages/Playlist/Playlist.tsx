@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
-import { useContext, useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import { FaRegClock } from 'react-icons/fa'
 import { useSelector } from 'react-redux'
@@ -18,8 +18,6 @@ import { RootState } from 'src/redux/store'
 import { formatTotalTime } from 'src/utils/helper'
 import PlaylistItem from './component/PlaylistItem/PlaylistItem'
 import RecommendedTrackItem from './component/RecommendedTrackItem/RecommendedTrackItem'
-import { Track } from 'src/types/playlist.type'
-import { PlayerContext } from 'src/context/PlayerContext'
 
 export default function Playlist() {
   const { id } = useParams()
@@ -32,19 +30,19 @@ export default function Playlist() {
   })
 
   const currentUserId = useSelector((state: RootState) => state.profile.profile?.id)
-  const isCurrentUserOwnPlaylist = playlist?.owner.id === currentUserId
+  const isCurrentUserOwnPlaylist = playlist?.owner?.id === currentUserId
 
   const totalTime = useMemo(() => {
     if (playlist) {
       return playlist.tracks.items.reduce((accumulator, currentItem) => {
-        return accumulator + currentItem.track.duration_ms
+        return accumulator + Number(currentItem.track?.duration_ms || 0)
       }, 0)
     }
     return 0
   }, [playlist])
 
-  const seed_artists = playlist && playlist.tracks.items.at(0)?.track.artists.at(0)?.id
-  const seed_tracks = playlist && playlist.tracks.items.at(0)?.track.id
+  const seed_artists = playlist && playlist.tracks.items.at(0)?.track?.artists.at(0)?.id
+  const seed_tracks = playlist && playlist.tracks.items.at(0)?.track?.id
 
   const {
     data: recommendedTracks,
@@ -92,15 +90,6 @@ export default function Playlist() {
         refetchPlaylist()
       })
   }
-
-  // const { setTracksQueue, setCurrentTrack } = useContext(PlayerContext)
-  // useEffect(() => {
-  //   if (playlist) {
-  //     const tracks: Track[] = playlist.tracks?.items.map((track) => track.track)
-  //     setTracksQueue && setTracksQueue(tracks)
-  //     setCurrentTrack && setCurrentTrack(tracks.length > 0 ? tracks[0] : undefined)
-  //   }
-  // }, [playlist, setTracksQueue, setCurrentTrack])
 
   const isLoading = isLoadingPlaylist || isLoadingRecommendedTracks || isFetchingCurrentUserPlaylists
   return isLoading ? (
@@ -158,16 +147,20 @@ export default function Playlist() {
             <div className='flex flex-col gap-2'>
               {currentUserPlaylists &&
                 playlist &&
-                playlist.tracks.items.map((track, index) => (
-                  <PlaylistItem
-                    key={track.track.id + index}
-                    track={track.track}
-                    index={index + 1}
-                    onRemoveTrack={handleRemoveTrackFromPlaylist(track.track.uri)}
-                    isCurrentUserOwnPlaylist={isCurrentUserOwnPlaylist}
-                    currentUserPlaylists={currentUserPlaylists?.items}
-                  />
-                ))}
+                playlist.tracks.items.map((track, index) => {
+                  return (
+                    track?.track && (
+                      <PlaylistItem
+                        key={track.track.id + index}
+                        track={track.track}
+                        index={index + 1}
+                        onRemoveTrack={handleRemoveTrackFromPlaylist(track.track.uri)}
+                        isCurrentUserOwnPlaylist={isCurrentUserOwnPlaylist}
+                        currentUserPlaylists={currentUserPlaylists.items}
+                      />
+                    )
+                  )
+                })}
             </div>
           </div>
         </div>
