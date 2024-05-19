@@ -189,7 +189,14 @@ export const PlayerContextProvider = ({ children }: Props) => {
   }
 
   const onAudioEnded = (event: React.SyntheticEvent<HTMLAudioElement, Event>) => {
-    setPlayStatus(false)
+    if (isNextAvailable) {
+      next()
+    } else if (tracksQueue.length > 0) {
+      setCurrentTrack(tracksQueue[0])
+      audioRef.current.play()
+    } else {
+      setPlayStatus(false)
+    }
   }
 
   const toggleLoop = () => {
