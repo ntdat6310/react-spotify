@@ -1,5 +1,5 @@
 export const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID
-export const redirect_uri = 'http://localhost:3000/login'
+export const redirect_uri = 'https://ntdat-react-spotify.vercel.app/login'
 
 export async function redirectToSpotifyAuthCodeFlow() {
   const verifier = generateCodeVerifier(128)
