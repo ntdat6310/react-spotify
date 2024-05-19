@@ -4,7 +4,7 @@ import { Album, Albums, ArtistProfile, ArtistWithImage, CurrentUserAlbums, Track
 import { AuthSpotify } from 'src/types/auth.type'
 import { Playlist, Playlists, Track } from 'src/types/playlist.type'
 import { UserProfile } from 'src/types/user.type'
-import { clearLS, getAccessTokenFromLS } from 'src/utils/auth'
+import { clearLS, getAccessTokenFromLS } from 'src/utils/localStorage'
 import { isUnauthorizedError } from 'src/utils/helper'
 import { clientId, redirect_uri } from 'src/utils/spotify'
 

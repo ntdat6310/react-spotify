@@ -1,3 +1,4 @@
+import { Track } from 'src/types/playlist.type'
 import { UserProfile } from 'src/types/user.type'
 
 export const getAccessTokenFromLS = () => {
@@ -35,4 +36,22 @@ export const clearLS = () => {
    */
   const clearLocalStorageEvent = new Event('clearLS')
   LocalStorageEventTarget.dispatchEvent(clearLocalStorageEvent)
+}
+
+export const setTracksQueueToLS = (tracksQueue: Track[]) => {
+  localStorage.setItem('tracks_queue', JSON.stringify(tracksQueue))
+}
+
+export const getTracksQueueFromLS = (): Track[] => {
+  const res = localStorage.getItem('tracks_queue')
+  return res ? JSON.parse(res) : []
+}
+
+export const setCurrentTrackToLS = (track: Track) => {
+  localStorage.setItem('current_track', JSON.stringify(track))
+}
+
+export const getCurrentTrackFromLS = (): Track | undefined => {
+  const res = localStorage.getItem('current_track')
+  return res ? JSON.parse(res) : undefined
 }

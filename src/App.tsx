@@ -8,7 +8,7 @@ import { PlayerContext } from './context/PlayerContext'
 import { useGetCurrentUserProfileQuery } from './redux/apis/spotifyApi'
 import { reset, setProfile } from './redux/slices/profile.slice'
 import useRouteElements from './routes/useRouteElements'
-import { LocalStorageEventTarget, getAccessTokenFromLS } from './utils/auth'
+import { LocalStorageEventTarget, getAccessTokenFromLS } from './utils/localStorage'
 
 function App() {
   const dispatch = useDispatch()

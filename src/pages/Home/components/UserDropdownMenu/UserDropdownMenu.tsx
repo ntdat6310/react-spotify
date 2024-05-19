@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { UserProfile } from 'src/types/user.type'
-import { clearLS } from 'src/utils/auth'
+import { clearLS } from 'src/utils/localStorage'
 import Popover from '../Popover'
 
 interface Props {

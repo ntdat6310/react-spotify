@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { UserProfile } from 'src/types/user.type'
-import { getAccessTokenFromLS, getProfileFromLS } from 'src/utils/auth'
+import { getAccessTokenFromLS, getProfileFromLS } from 'src/utils/localStorage'
 
 const initialState: {
   profile: UserProfile | null

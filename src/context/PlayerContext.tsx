@@ -2,6 +2,12 @@
 import { createContext, useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import { Track } from 'src/types/playlist.type'
+import {
+  getCurrentTrackFromLS,
+  getTracksQueueFromLS,
+  setCurrentTrackToLS,
+  setTracksQueueToLS
+} from 'src/utils/localStorage'
 
 interface PlayerContextInterface {
   tracksQueue: Track[]
@@ -37,12 +43,12 @@ interface PlayerContextInterface {
 }
 
 const initialState: PlayerContextInterface = {
+  tracksQueue: getTracksQueueFromLS(),
+  currentTrack: getCurrentTrackFromLS(),
   pause: () => {},
   play: () => {},
   playNewTrack: () => {},
   audioRef: undefined,
-  tracksQueue: [],
-  currentTrack: undefined,
   setTracksQueue: undefined,
   setCurrentTrack: undefined,
   playStatus: false,
@@ -90,6 +96,18 @@ export const PlayerContextProvider = ({ children }: Props) => {
   const isTrackQueueContainingCurrentTrack = useMemo(() => {
     return tracksQueue.some((track) => track.id === currentTrack?.id)
   }, [tracksQueue, currentTrack])
+
+  /**
+   * Store currentTrack and tracksQueue to localStorage whenever one of them change
+   */
+  useEffect(() => {
+    if (currentTrack) {
+      setCurrentTrackToLS(currentTrack)
+    }
+  }, [currentTrack])
+  useEffect(() => {
+    setTracksQueueToLS(tracksQueue)
+  }, [tracksQueue])
 
   const addCurrentTrackToQueue = () => {
     if (currentTrack) {

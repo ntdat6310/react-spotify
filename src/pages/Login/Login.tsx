@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import useQueryParams from 'src/hooks/useQueryParams'
 import { useGetTokensQuery } from 'src/redux/apis/spotifyApi'
 import { setIsAuthenticated } from 'src/redux/slices/profile.slice'
-import { setAccessTokenToLS, setRefreshTokenToLS } from 'src/utils/auth'
+import { setAccessTokenToLS, setRefreshTokenToLS } from 'src/utils/localStorage'
 import { redirectToSpotifyAuthCodeFlow } from 'src/utils/spotify'
 
 export default function Login() {
