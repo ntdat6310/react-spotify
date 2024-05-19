@@ -93,14 +93,14 @@ export default function Playlist() {
       })
   }
 
-  const { setTracksQueue, setCurrentTrack } = useContext(PlayerContext)
-  useEffect(() => {
-    if (playlist) {
-      const tracks: Track[] = playlist.tracks?.items.map((track) => track.track)
-      setTracksQueue && setTracksQueue(tracks)
-      setCurrentTrack && setCurrentTrack(tracks.length > 0 ? tracks[0] : undefined)
-    }
-  }, [playlist, setTracksQueue, setCurrentTrack])
+  // const { setTracksQueue, setCurrentTrack } = useContext(PlayerContext)
+  // useEffect(() => {
+  //   if (playlist) {
+  //     const tracks: Track[] = playlist.tracks?.items.map((track) => track.track)
+  //     setTracksQueue && setTracksQueue(tracks)
+  //     setCurrentTrack && setCurrentTrack(tracks.length > 0 ? tracks[0] : undefined)
+  //   }
+  // }, [playlist, setTracksQueue, setCurrentTrack])
 
   const isLoading = isLoadingPlaylist || isLoadingRecommendedTracks || isFetchingCurrentUserPlaylists
   return isLoading ? (

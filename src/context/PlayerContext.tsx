@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createContext, useEffect, useRef, useState } from 'react'
+import { createContext, useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import { Track } from 'src/types/playlist.type'
 
@@ -23,6 +23,13 @@ interface PlayerContextInterface {
   loop: boolean
   toggleLoop: () => void
   changeVolumn: (volumn: number) => void
+  addCurrentTrackToQueue: () => void
+  removeCurrentTrackFromQueue: () => void
+  isTrackQueueContainingCurrentTrack: boolean
+  next: () => void
+  previous: () => void
+  isNextAvailable: boolean
+  isPreviousAvailable: boolean
 }
 
 const initialState: PlayerContextInterface = {
@@ -44,7 +51,14 @@ const initialState: PlayerContextInterface = {
   onAudioEnded: () => {},
   loop: false,
   toggleLoop: () => {},
-  changeVolumn: () => {}
+  changeVolumn: () => {},
+  addCurrentTrackToQueue: () => {},
+  removeCurrentTrackFromQueue: () => {},
+  isTrackQueueContainingCurrentTrack: false,
+  next: () => {},
+  previous: () => {},
+  isNextAvailable: false,
+  isPreviousAvailable: false
 }
 export const PlayerContext = createContext<PlayerContextInterface>(initialState)
 
@@ -59,6 +73,61 @@ export const PlayerContextProvider = ({ children }: Props) => {
   const [time, setTime] = useState(initialState.time)
   const [loop, setLoop] = useState(initialState.loop)
   const seekBarRef = useRef(null)
+
+  const isTrackQueueContainingCurrentTrack = useMemo(() => {
+    return tracksQueue.some((track) => track.id === currentTrack?.id)
+  }, [tracksQueue, currentTrack])
+
+  const addCurrentTrackToQueue = () => {
+    if (currentTrack) {
+      const isTrackQueueContainingTrack = tracksQueue.some((item) => item.id === currentTrack.id)
+      if (!isTrackQueueContainingTrack) {
+        setTracksQueue((prev) => [...prev, currentTrack])
+        toast.success('Track is added', {
+          autoClose: 1000,
+          position: 'top-center'
+        })
+      }
+    }
+  }
+
+  const removeCurrentTrackFromQueue = () => {
+    toast.success('Track is removed', {
+      autoClose: 1000,
+      position: 'top-center'
+    })
+    setTracksQueue((prev) => {
+      return prev.filter((track) => track.id !== currentTrack?.id)
+    })
+  }
+
+  const isNextAvailable = useMemo(() => {
+    const index = tracksQueue.findIndex((item) => item.id === currentTrack?.id)
+    return index < tracksQueue.length - 1
+  }, [tracksQueue, currentTrack?.id])
+
+  const isPreviousAvailable = useMemo(() => {
+    const index = tracksQueue.findIndex((item) => item.id === currentTrack?.id)
+    return index > 0
+  }, [tracksQueue, currentTrack?.id])
+
+  const next = () => {
+    const index = tracksQueue.findIndex((item) => item.id === currentTrack?.id)
+    setCurrentTrack(() => {
+      if (index < tracksQueue.length - 1) {
+        return tracksQueue[index + 1]
+      } else {
+        return tracksQueue[0]
+      }
+    })
+  }
+
+  const previous = () => {
+    const index = tracksQueue.findIndex((item) => item.id === currentTrack?.id)
+    if (index > 0) {
+      setCurrentTrack(tracksQueue[index - 1])
+    }
+  }
 
   const play = () => {
     setPlayStatus(true)
@@ -127,6 +196,7 @@ export const PlayerContextProvider = ({ children }: Props) => {
     setLoop((prev) => !prev)
   }
 
+  console.log(tracksQueue)
   useEffect(() => {
     audioRef.current.loop = loop
   }, [loop])
@@ -152,7 +222,14 @@ export const PlayerContextProvider = ({ children }: Props) => {
         onAudioEnded,
         loop,
         toggleLoop,
-        changeVolumn
+        changeVolumn,
+        addCurrentTrackToQueue,
+        removeCurrentTrackFromQueue,
+        isTrackQueueContainingCurrentTrack,
+        next,
+        previous,
+        isNextAvailable,
+        isPreviousAvailable
       }}
     >
       {children}
